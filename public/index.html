@@ -8,11 +8,12 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --bg: #f4f4f1; --surface: #ffffff; --border: #e0e0da;
-      --text: #1a1a1a; --muted: #6b6b67; --hint: #a0a09a;
-      --accent: #1a1a1a; --accent-fg: #fff;
-      --success-bg: #edfaed; --success-border: #b2e6b2; --success-text: #1a6b1a;
-      --danger: #c0392b; --radius: 10px; --radius-sm: 6px;
+      --bg: #f5f5f5; --surface: #ffffff; --border: #d4d4d4;
+      --text: #000000; --muted: #38574D; --hint: #6b7c75;
+      --accent: #0864AF; --accent-fg: #ffffff;
+      --success-bg: #e8f3ed; --success-border: #38574D; --success-text: #38574D;
+      --danger: #DE0500; --radius: 10px; --radius-sm: 6px;
+      --primary: #0864AF; --secondary: #38574D; --accent-yellow: #F6B418; --white: #ffffff; --black: #000000;
     }
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -25,8 +26,9 @@
     .header .badge {
       display: inline-block; font-size: 12px; font-weight: 600;
       letter-spacing: 0.08em; text-transform: uppercase;
-      color: var(--muted); border: 1px solid var(--border);
+      color: var(--accent); border: 2px solid var(--accent-yellow);
       border-radius: 50px; padding: 4px 14px; margin-bottom: 14px;
+      background: #fffbf0;
     }
     .header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.5px; }
     .header p { font-size: 15px; color: var(--muted); }
@@ -88,12 +90,12 @@
     .success p { font-size: 15px; color: var(--muted); margin-bottom: 1.5rem; }
     .btn-outline {
       padding: 10px 20px; font-size: 14px; font-weight: 500;
-      border: 1px solid var(--border); border-radius: var(--radius-sm);
-      background: var(--surface); color: var(--text); cursor: pointer;
+      border: 1px solid var(--secondary); border-radius: var(--radius-sm);
+      background: var(--surface); color: var(--secondary); cursor: pointer;
       display: inline-flex; align-items: center; gap: 7px;
-      transition: background 0.12s;
+      transition: background 0.12s, color 0.12s;
     }
-    .btn-outline:hover { background: var(--bg); }
+    .btn-outline:hover { background: #e8f3ed; color: #1a3a2f; }
 
     .error-msg {
       background: #fff5f5; border: 1px solid #f5c0bc;
