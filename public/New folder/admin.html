@@ -18,19 +18,13 @@
     }
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: url('bg.jpg') center center / cover no-repeat fixed;
-      color: var(--text); min-height: 100vh;
-    }
-    body::before {
-      content: ''; position: fixed; inset: 0;
-      background: rgba(0, 20, 50, 0.62); z-index: 0;
+      background: var(--bg); color: var(--text); min-height: 100vh;
     }
 
     /* ── Login ── */
     .login-wrap {
       min-height: 100vh; display: flex; align-items: center;
       justify-content: center; padding: 2rem;
-      position: relative; z-index: 1;
     }
     .login-card {
       background: var(--surface); border: 1px solid var(--border);
@@ -67,15 +61,14 @@
     /* ── Dashboard ── */
     .dashboard { display: none; }
     .topbar {
-      background: rgba(8, 30, 70, 0.88); border-bottom: 1px solid rgba(246,180,24,0.4);
+      background: var(--surface); border-bottom: 2px solid var(--accent);
       padding: 0 2rem; height: 58px;
       display: flex; align-items: center; justify-content: space-between;
       position: sticky; top: 0; z-index: 10;
-      backdrop-filter: blur(10px);
     }
     .topbar-left { display: flex; align-items: center; gap: 10px; }
-    .topbar-left h1 { font-size: 17px; font-weight: 700; color: #fff; }
-    .topbar-left span { font-size: 12px; color: rgba(255,255,255,0.7); background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2); border-radius: 50px; padding: 3px 10px; }
+    .topbar-left h1 { font-size: 17px; font-weight: 700; }
+    .topbar-left span { font-size: 12px; color: var(--muted); background: var(--bg); border: 1px solid var(--border); border-radius: 50px; padding: 3px 10px; }
     .topbar-right { display: flex; gap: 8px; align-items: center; }
 
     .btn {
@@ -91,7 +84,7 @@
     .btn.danger { color: var(--danger); border-color: var(--danger-border); }
     .btn.danger:hover { background: var(--danger-bg); }
 
-    .main { padding: 2rem; position: relative; z-index: 1; }
+    .main { padding: 2rem; }
 
     /* ── Stats row ── */
     .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.75rem; }
