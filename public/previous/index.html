@@ -18,49 +18,33 @@
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background: url('bg.jpg') center center / cover no-repeat fixed;
-      color: var(--text); min-height: 100vh; padding: 0;
+      color: var(--text); min-height: 100vh; padding: 2.5rem 1rem 4rem;
     }
     body::before {
       content: ''; position: fixed; inset: 0;
       background: rgba(0, 20, 50, 0.55); z-index: 0;
     }
+    .wrap { max-width: 900px; margin: 0 auto; position: relative; z-index: 1; }
 
-    /* ── Full-width heading banner ── */
-    .hero {
-      position: relative; z-index: 1;
-      width: 100%; background: rgba(6, 50, 110, 0.88);
-      border-bottom: 5px solid var(--accent-yellow);
-      backdrop-filter: blur(10px);
-      padding: 48px 40px;
-      text-align: center;
-      box-shadow: 0 6px 32px rgba(0,0,0,0.5);
-    }
-    .hero .icon { font-size: 48px; color: var(--accent-yellow); margin-bottom: 16px; }
-    .hero h1 {
-      font-size: 52px; font-weight: 900; line-height: 1.15;
-      letter-spacing: 0.03em; text-transform: uppercase;
-      color: var(--accent-yellow);
-      text-shadow: 0 3px 14px rgba(0,0,0,0.6);
-      margin-bottom: 14px;
-    }
-    .hero p {
-      font-size: 20px; font-weight: 500;
-      color: rgba(255,255,255,0.9);
-      text-shadow: 0 2px 6px rgba(0,0,0,0.4);
-      letter-spacing: 0.05em;
-    }
-    @media(max-width: 768px){
-      .hero { padding: 32px 20px; }
-      .hero .icon { font-size: 32px; }
-      .hero h1 { font-size: 28px; }
-      .hero p { font-size: 15px; }
-    }
+.header { text-align: center; margin-bottom: 2rem; }
+.header .badge {
+  display: block; width: 100%; font-size: 32px; font-weight: 900;
+  letter-spacing: 0.04em; text-transform: uppercase;
+  color: var(--accent-yellow); border: 3px solid var(--accent-yellow);
+  border-radius: 12px; padding: 22px 24px; margin-bottom: 18px;
+  background: rgba(8, 100, 175, 0.75);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.35);
+  line-height: 1.4; text-shadow: 0 2px 6px rgba(0,0,0,0.4);
+  text-align: center;
+}
+.header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.5px; color: #fff; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+.header p { font-size: 15px; color: rgba(255,255,255,0.85); text-shadow: 0 1px 4px rgba(0,0,0,0.4); }
 
-    /* ── Form area ── */
-    .wrap { max-width: 760px; margin: 0 auto; position: relative; z-index: 1; padding: 2.5rem 1.5rem 4rem; }
-
-    .sub-header { text-align: center; margin-bottom: 1.75rem; }
-    .sub-header p { font-size: 15px; color: rgba(255,255,255,0.85); text-shadow: 0 1px 4px rgba(0,0,0,0.4); }
+@media(max-width: 768px){
+  .header .badge { font-size: 20px; padding: 16px; }
+  .header h1 { font-size: 22px; }
+}
 
     .card {
       background: var(--surface); border: 1px solid var(--border);
@@ -131,7 +115,8 @@
     .btn-outline:hover { background: #e8f3ed; color: #1a3a2f; }
 
     .error-msg {
-      border: 1px solid #f5c0bc; border-left: 3px solid var(--danger);
+      background: #fff5f5; border: 1px solid #f5c0bc;
+      border-left: 3px solid var(--danger);
       border-radius: var(--radius-sm); padding: 10px 14px;
       font-size: 13px; color: var(--danger); margin-bottom: 1rem;
       display: none; align-items: center; gap: 8px;
@@ -139,120 +124,115 @@
     }
     .spinner { display: none; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.4); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
-    .admin-link { text-align: center; margin-top: 1.25rem; font-size: 13px; }
+    .admin-link { text-align: center; margin-top: 1.25rem; font-size: 13px; color: rgba(255,255,255,0.6); }
     .admin-link a { color: rgba(255,255,255,0.75); text-decoration: none; }
     .admin-link a:hover { text-decoration: underline; color: #fff; }
   </style>
 </head>
 <body>
-
-  <!-- ── FULL WIDTH HEADING ── -->
-  <div class="hero">
-    <div class="icon"><i class="fa-solid fa-fish"></i></div>
-    <h1>Tanzania Digital Fisheries Trade &amp;<br>Market Linkages Forum 2026</h1>
-    <p>BUY &nbsp;·&nbsp; SELL &nbsp;·&nbsp; CONNECT &nbsp;·&nbsp; GROW</p>
+<div class="wrap">
+  <div class="header">
+    <div class="badge"><i class="fa-regular fa-calendar-check"></i> &nbsp;TANZANIA DIGITAL FISHERIES TRADE & MARKET LINKAGES FORUM 2026</div>
+    <h1>Register for the Event</h1>
+    <p>Fill in your details below. Fields marked <span style="color:#c0392b">*</span> are required.</p>
   </div>
 
-  <!-- ── FORM ── -->
-  <div class="wrap">
-    <div class="sub-header">
-      <p>Fill in your details below to register. Fields marked <span style="color:#f87171">*</span> are required.</p>
-    </div>
+  <div class="card" id="form-card">
+    <div id="error-box" class="error-msg"><i class="fa-solid fa-circle-exclamation"></i><span id="error-text"></span></div>
 
-    <div class="card" id="form-card">
-      <div id="error-box" class="error-msg"><i class="fa-solid fa-circle-exclamation"></i><span id="error-text"></span></div>
-
-      <div class="section-label">Personal information</div>
-      <div class="row">
-        <div class="field">
-          <label>Full name <span class="req">*</span></label>
-          <input type="text" id="f-name" placeholder="e.g. Cosmas Sombela" autocomplete="name"/>
-        </div>
-        <div class="field">
-          <label>Email address <span class="req">*</span></label>
-          <input type="email" id="f-email" placeholder="you@example.com" autocomplete="email"/>
-        </div>
-      </div>
-      <div class="row">
-        <div class="field">
-          <label>Phone number <span class="req">*</span></label>
-          <input type="tel" id="f-phone" placeholder="+255 700 000 000" autocomplete="tel"/>
-        </div>
-        <div class="field">
-          <label>Country</label>
-          <input type="text" id="f-country" placeholder="e.g. Tanzania" autocomplete="country-name"/>
-        </div>
-      </div>
-
-      <div class="section-label">Professional information</div>
-      <div class="row">
-        <div class="field">
-          <label>Organization</label>
-          <input type="text" id="f-org" placeholder="Company or institution" autocomplete="organization"/>
-        </div>
-        <div class="field">
-          <label>Job title</label>
-          <input type="text" id="f-title" placeholder="e.g. Data Scientist"/>
-        </div>
+    <div class="section-label">Personal information</div>
+    <div class="row">
+      <div class="field">
+        <label>Full name <span class="req">*</span></label>
+        <input type="text" id="f-name" placeholder="e.g. Cosmas Sombela" autocomplete="name"/>
       </div>
       <div class="field">
-        <label>Department / Faculty</label>
-        <input type="text" id="f-dept" placeholder="e.g. Research &amp; Innovation"/>
+        <label>Email address <span class="req">*</span></label>
+        <input type="email" id="f-email" placeholder="you@example.com" autocomplete="email"/>
       </div>
-
-      <div class="section-label">Event preferences</div>
-      <div class="row">
-        <div class="field">
-          <label>Dietary requirements</label>
-          <select id="f-diet">
-            <option value="None">None / not applicable</option>
-            <option>Vegetarian</option>
-            <option>Vegan</option>
-            <option>Halal</option>
-            <option>Kosher</option>
-            <option>Gluten-free</option>
-            <option>Other</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>How did you hear about this event?</label>
-          <select id="f-source">
-            <option value="">Select an option</option>
-            <option>Email invitation</option>
-            <option>Social media</option>
-            <option>Colleague / friend</option>
-            <option>Organization website</option>
-            <option>Other</option>
-          </select>
-        </div>
+    </div>
+    <div class="row">
+      <div class="field">
+        <label>Phone number <span class="req">*</span></label>
+        <input type="tel" id="f-phone" placeholder="+255 700 000 000" autocomplete="tel"/>
       </div>
       <div class="field">
-        <label>Additional comments</label>
-        <textarea id="f-comments" placeholder="Any special requirements or questions..."></textarea>
+        <label>Country</label>
+        <input type="text" id="f-country" placeholder="e.g. Tanzania" autocomplete="country-name"/>
       </div>
-
-      <button class="submit-btn" id="submit-btn" onclick="submitForm()">
-        <span class="spinner" id="spinner"></span>
-        <i class="fa-solid fa-paper-plane" id="send-icon"></i>
-        <span id="btn-text">Submit registration</span>
-      </button>
     </div>
 
-    <div class="success" id="success-card">
-      <div class="icon"><i class="fa-solid fa-circle-check"></i></div>
-      <h2>You're registered!</h2>
-      <p>Thank you — your registration has been saved successfully.<br>We look forward to seeing you at the Forum.</p>
-      <button class="btn-outline" onclick="resetForm()">
-        <i class="fa-solid fa-plus"></i> Register another person
-      </button>
+    <div class="section-label">Professional information</div>
+    <div class="row">
+      <div class="field">
+        <label>Organization</label>
+        <input type="text" id="f-org" placeholder="Company or institution" autocomplete="organization"/>
+      </div>
+      <div class="field">
+        <label>Job title</label>
+        <input type="text" id="f-title" placeholder="e.g. Data Scientist"/>
+      </div>
+    </div>
+    <div class="field">
+      <label>Department / Faculty</label>
+      <input type="text" id="f-dept" placeholder="e.g. Research &amp; Innovation"/>
     </div>
 
-    <p class="admin-link"><a href="/admin.html"><i class="fa-solid fa-lock"></i> Admin panel</a></p>
+    <div class="section-label">Event preferences</div>
+    <div class="row">
+      <div class="field">
+        <label>Dietary requirements</label>
+        <select id="f-diet">
+          <option value="None">None / not applicable</option>
+          <option>Vegetarian</option>
+          <option>Vegan</option>
+          <option>Halal</option>
+          <option>Kosher</option>
+          <option>Gluten-free</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>How did you hear about this event?</label>
+        <select id="f-source">
+          <option value="">Select an option</option>
+          <option>Email invitation</option>
+          <option>Social media</option>
+          <option>Colleague / friend</option>
+          <option>Organization website</option>
+          <option>Other</option>
+        </select>
+      </div>
+    </div>
+    <div class="field">
+      <label>Additional comments</label>
+      <textarea id="f-comments" placeholder="Any special requirements or questions..."></textarea>
+    </div>
+
+    <button class="submit-btn" id="submit-btn" onclick="submitForm()">
+      <span class="spinner" id="spinner"></span>
+      <i class="fa-solid fa-paper-plane" id="send-icon"></i>
+      <span id="btn-text">Submit registration</span>
+    </button>
   </div>
+
+  <div class="success" id="success-card">
+    <div class="icon"><i class="fa-solid fa-circle-check"></i></div>
+    <h2>You're registered!</h2>
+    <p>Thank you — your registration has been saved successfully.<br>We look forward to seeing you at the event.</p>
+    <button class="btn-outline" onclick="resetForm()">
+      <i class="fa-solid fa-plus"></i> Register another person
+    </button>
+  </div>
+
+  <p class="admin-link"><a href="/admin.html"><i class="fa-solid fa-lock"></i> Admin panel</a></p>
+</div>
 
 <script>
   const API = '';
+
   function g(id){ return document.getElementById(id).value.trim(); }
+
   function showError(msg){
     const box = document.getElementById('error-box');
     document.getElementById('error-text').textContent = msg;
@@ -264,25 +244,42 @@
   async function submitForm(){
     hideError();
     const name = g('f-name'), email = g('f-email'), phone = g('f-phone');
-    if (!name || !email || !phone){ showError('Please fill in all required fields: Full name, Email, and Phone number.'); return; }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ showError('Please enter a valid email address.'); return; }
+    if (!name || !email || !phone){
+      showError('Please fill in all required fields: Full name, Email, and Phone number.'); return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+      showError('Please enter a valid email address.'); return;
+    }
+
     const btn = document.getElementById('submit-btn');
     btn.disabled = true;
     document.getElementById('spinner').style.display = 'block';
     document.getElementById('send-icon').style.display = 'none';
     document.getElementById('btn-text').textContent = 'Submitting...';
+
     try {
       const res = await fetch(API + '/api/register', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, phone, organization: g('f-org'), jobTitle: g('f-title'), department: g('f-dept'), country: g('f-country'), diet: g('f-diet'), source: g('f-source'), comments: g('f-comments') })
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name, email, phone,
+          organization: g('f-org'),
+          jobTitle: g('f-title'),
+          department: g('f-dept'),
+          country: g('f-country'),
+          diet: g('f-diet'),
+          source: g('f-source'),
+          comments: g('f-comments')
+        })
       });
       const data = await res.json();
       if (!res.ok) { showError(data.error || 'Submission failed. Please try again.'); return; }
       document.getElementById('form-card').style.display = 'none';
       document.getElementById('success-card').style.display = 'block';
       window.scrollTo({ top: 0, behavior: 'smooth' });
-    } catch(e){ showError('Could not connect to server. Make sure the server is running.'); }
-    finally {
+    } catch(e){
+      showError('Could not connect to server. Make sure the server is running.');
+    } finally {
       btn.disabled = false;
       document.getElementById('spinner').style.display = 'none';
       document.getElementById('send-icon').style.display = 'inline';
