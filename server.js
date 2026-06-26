@@ -19,7 +19,7 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // ── Simple admin auth middleware ──────────────────────────
-const ADMIN_PASSWORD = 'admin1234'; // ← Change this password
+const ADMIN_PASSWORD = 'Tanfish@2026'; // ← Change this password
 
 function adminAuth(req, res, next) {
   const token = req.headers['x-admin-token'] || req.query.t;
