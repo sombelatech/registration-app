@@ -14,30 +14,23 @@ const PORT = process.env.PORT || 3000;
 //  ✏️  EVENT CONFIG — change these for each new event
 // ═══════════════════════════════════════════════════════════
 const CONFIG = {
-  eventName:        'Tanzania Digital Fisheries Trade & Market Linkages Forum 2026',
-  eventDate:        '2026-07-22',
-  eventDateDisplay: 'July 22–23, 2026',
-  eventLocation:    'Dar es Salaam, Tanzania',
-  eventWebsite:     'https://tanfishmarket.com/',
-  registrationDeadline: '2026-07-20',
-  adminPassword:    'Tanfish@2026',
-  adminEmail:       'YOUR_EMAIL@gmail.com',
-  gmailUser:        'YOUR_GMAIL@gmail.com',
-  gmailPass:        'YOUR_APP_PASSWORD',
+  eventName:    'Tanzania Digital Fisheries Trade & Market Linkages Forum 2026',
+  eventDate:    '2026-09-15',
+  eventDateDisplay: 'September 15, 2026',
+  eventLocation: 'Dar es Salaam, Tanzania',
+  eventWebsite: 'https://tanfishmarket.com/',
+  registrationDeadline: '2026-09-10',
+  adminPassword: 'admin1234',          // ← change this!
+  adminEmail:   'YOUR_EMAIL@gmail.com', // ← your personal email to receive notifications
+  // ── Gmail sender (fill after creating Gmail account) ──
+  gmailUser:    'YOUR_GMAIL@gmail.com', // ← sender Gmail address
+  gmailPass:    'YOUR_APP_PASSWORD',    // ← 16-digit Gmail App Password
 };
 // ═══════════════════════════════════════════════════════════
 
 // ── Database ──────────────────────────────────────────────
-try {
-  if (!fs.existsSync(path.join(__dirname, 'data'))) {
-    fs.mkdirSync(path.join(__dirname, 'data'), { recursive: true });
-  }
-} catch(e) { console.error('Data dir warning:', e.message); }
-
-const db = Datastore.create({
-  filename: path.join(__dirname, 'data', 'registrations.db'),
-  autoload: true
-});
+if (!fs.existsSync(path.join(__dirname, 'data'))) fs.mkdirSync(path.join(__dirname, 'data'));
+const db = Datastore.create({ filename: path.join(__dirname, 'data', 'registrations.db'), autoload: true });
 
 // ── Middleware ────────────────────────────────────────────
 app.use(cors());
@@ -100,11 +93,11 @@ async function buildInvitationEmail(record, qrDataUrl) {
           <td style="padding:32px;">
             <p style="font-size:16px;color:#1a1a1a;margin:0 0 6px;">Dear <strong>${record.name}</strong>,</p>
             <p style="font-size:15px;color:#556370;margin:0 0 24px;line-height:1.6;">
-              Thank you for registering for the <strong>${CONFIG.eventName}</strong>.
+              Thank you for registering for the <strong>${CONFIG.eventName}</strong>. 
               We are delighted to confirm your registration and look forward to welcoming you to this prestigious forum.
             </p>
 
-            <!-- Registration ID -->
+            <!-- Registration ID box -->
             <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px;">
               <tr>
                 <td style="background:linear-gradient(135deg,#e8f3ed,#f0f7ff);border:2px solid #38574D;border-radius:10px;padding:18px 24px;text-align:center;">
@@ -143,7 +136,7 @@ async function buildInvitationEmail(record, qrDataUrl) {
                 ['Job Title', record.jobTitle || '—'],
                 ['Country', record.country || '—'],
               ].map(([k,v], i) => `
-              <tr style="${i%2===1 ? 'background:#f8fafc;' : ''}border-bottom:1px solid #dde3ea;">
+              <tr style="${i%2===1?'background:#f8fafc;':''}border-bottom:1px solid #dde3ea;">
                 <td style="padding:10px 18px;font-size:13px;font-weight:700;color:#556370;width:130px;">${k}</td>
                 <td style="padding:10px 18px;font-size:14px;color:#1a1a1a;">${v}</td>
               </tr>`).join('')}
@@ -161,7 +154,7 @@ async function buildInvitationEmail(record, qrDataUrl) {
             </table>
 
             <p style="font-size:15px;color:#556370;line-height:1.6;margin:0 0 8px;">
-              If you have any questions, please visit our website or contact the organizers.
+              If you have any questions, please do not hesitate to contact us by visiting our website.
             </p>
             <p style="font-size:15px;color:#1a1a1a;font-weight:600;margin:0;">We look forward to seeing you at the Forum!</p>
           </td>
@@ -199,18 +192,18 @@ function buildAdminEmail(record) {
       <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #dde3ea;border-radius:8px;overflow:hidden;">
         ${[
           ['Registration ID', record.registrationId],
-          ['Full Name',       record.name],
-          ['Email',           record.email],
-          ['Phone',           record.phone],
-          ['Organization',    record.organization || '—'],
-          ['Job Title',       record.jobTitle || '—'],
-          ['Department',      record.department || '—'],
-          ['Country',         record.country || '—'],
-          ['Dietary',         record.diet || 'None'],
-          ['Heard From',      record.source || '—'],
-          ['Registered At',   record.registeredAt],
-        ].map(([k,v],i) => `
-        <tr style="${i%2===1 ? 'background:#f8fafc;' : ''}">
+          ['Full Name', record.name],
+          ['Email', record.email],
+          ['Phone', record.phone],
+          ['Organization', record.organization || '—'],
+          ['Job Title', record.jobTitle || '—'],
+          ['Department', record.department || '—'],
+          ['Country', record.country || '—'],
+          ['Dietary', record.diet || 'None'],
+          ['Heard From', record.source || '—'],
+          ['Registered At', record.registeredAt],
+        ].map(([k,v],i)=>`
+        <tr style="${i%2===1?'background:#f8fafc;':''}">
           <td style="padding:10px 14px;font-size:13px;font-weight:700;color:#556370;width:130px;border-bottom:1px solid #dde3ea;">${k}</td>
           <td style="padding:10px 14px;font-size:14px;color:#1a1a1a;border-bottom:1px solid #dde3ea;">${v}</td>
         </tr>`).join('')}
@@ -228,7 +221,7 @@ function buildAdminEmail(record) {
 // ── Send emails ───────────────────────────────────────────
 async function sendEmails(record) {
   if (!CONFIG.gmailUser || CONFIG.gmailUser === 'YOUR_GMAIL@gmail.com') {
-    console.log('⚠️  Email not configured — skipping.');
+    console.log('⚠️  Email not configured — skipping email send.');
     return;
   }
   try {
@@ -236,20 +229,25 @@ async function sendEmails(record) {
     const qrDataUrl = await generateQR(CONFIG.eventWebsite);
     const invitationHtml = await buildInvitationEmail(record, qrDataUrl);
     const adminHtml = buildAdminEmail(record);
+
+    // Send invitation to registrant
     await transporter.sendMail({
       from: `"TANFISH Forum 2026" <${CONFIG.gmailUser}>`,
       to: record.email,
       subject: `✅ Registration Confirmed — ${CONFIG.eventName} | ID: ${record.registrationId}`,
       html: invitationHtml
     });
+
+    // Notify admin
     await transporter.sendMail({
       from: `"TANFISH Registration System" <${CONFIG.gmailUser}>`,
       to: CONFIG.adminEmail,
       subject: `🔔 New Registration: ${record.name} — ${record.registrationId}`,
       html: adminHtml
     });
-    console.log(`✉️  Emails sent for ${record.name}`);
-  } catch(err) {
+
+    console.log(`✉️  Emails sent for ${record.name} (${record.email})`);
+  } catch (err) {
     console.error('❌ Email error:', err.message);
   }
 }
@@ -264,26 +262,25 @@ function adminAuth(req, res, next) {
 // ── Public API ────────────────────────────────────────────
 app.get('/api/config', (req, res) => {
   res.json({
-    eventName:            CONFIG.eventName,
-    eventDate:            CONFIG.eventDate,
-    eventDateDisplay:     CONFIG.eventDateDisplay,
-    eventLocation:        CONFIG.eventLocation,
-    eventWebsite:         CONFIG.eventWebsite,
+    eventName: CONFIG.eventName,
+    eventDate: CONFIG.eventDate,
+    eventDateDisplay: CONFIG.eventDateDisplay,
+    eventLocation: CONFIG.eventLocation,
+    eventWebsite: CONFIG.eventWebsite,
     registrationDeadline: CONFIG.registrationDeadline,
   });
 });
 
 app.get('/api/count', async (req, res) => {
-  try {
-    const count = await db.count({});
-    res.json({ count });
-  } catch(e) { res.json({ count: 0 }); }
+  const count = await db.count({});
+  res.json({ count });
 });
 
 app.post('/api/register', async (req, res) => {
   try {
     const now = new Date();
-    const deadline = new Date(CONFIG.registrationDeadline + 'T23:59:59');
+    const deadline = new Date(CONFIG.registrationDeadline);
+    deadline.setHours(23, 59, 59);
     if (now > deadline) return res.status(403).json({ error: 'Registration is now closed. The deadline has passed.' });
 
     const { name, email, phone, organization, jobTitle, department, country, diet, source, comments } = req.body;
@@ -295,25 +292,22 @@ app.post('/api/register', async (req, res) => {
     const count = await db.count({});
     const record = {
       registrationId: 'TF2026-' + String(count + 1).padStart(4, '0'),
-      name:         name.trim(),
-      email:        email.toLowerCase().trim(),
-      phone:        phone.trim(),
-      organization: organization?.trim() || '',
-      jobTitle:     jobTitle?.trim() || '',
-      department:   department?.trim() || '',
-      country:      country?.trim() || '',
-      diet:         diet?.trim() || 'None',
-      source:       source?.trim() || '',
-      comments:     comments?.trim() || '',
-      status:       'Confirmed',
+      name: name.trim(), email: email.toLowerCase().trim(), phone: phone.trim(),
+      organization: organization?.trim() || '', jobTitle: jobTitle?.trim() || '',
+      department: department?.trim() || '', country: country?.trim() || '',
+      diet: diet?.trim() || 'None', source: source?.trim() || '',
+      comments: comments?.trim() || '', status: 'Confirmed',
       registeredAt: new Date().toLocaleString('en-TZ', { timeZone: 'Africa/Dar_es_Salaam' }),
-      createdAt:    new Date()
+      createdAt: new Date()
     };
 
     const doc = await db.insert(record);
+
+    // Send emails in background (don't block response)
     sendEmails(record).catch(console.error);
+
     res.status(201).json({ success: true, id: doc.registrationId });
-  } catch(err) {
+  } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Server error. Please try again.' });
   }
@@ -327,57 +321,40 @@ app.post('/api/admin/login', (req, res) => {
 });
 
 app.get('/api/admin/registrations', adminAuth, async (req, res) => {
-  try {
-    const { search, country, status } = req.query;
-    let records = await db.find({}).sort({ createdAt: 1 });
-    if (search) {
-      const q = search.toLowerCase();
-      records = records.filter(r => [r.name,r.email,r.phone,r.organization,r.registrationId].some(v => (v||'').toLowerCase().includes(q)));
-    }
-    if (country) records = records.filter(r => r.country === country);
-    if (status)  records = records.filter(r => r.status === status);
-    res.json({ success: true, total: records.length, data: records });
-  } catch(e) { res.status(500).json({ error: 'Failed to fetch.' }); }
+  const { search, country, status } = req.query;
+  let records = await db.find({}).sort({ createdAt: 1 });
+  if (search) { const q = search.toLowerCase(); records = records.filter(r => [r.name,r.email,r.phone,r.organization,r.registrationId].some(v=>(v||'').toLowerCase().includes(q))); }
+  if (country) records = records.filter(r => r.country === country);
+  if (status) records = records.filter(r => r.status === status);
+  res.json({ success: true, total: records.length, data: records });
 });
 
 app.patch('/api/admin/registrations/:id', adminAuth, async (req, res) => {
-  try {
-    await db.update({ _id: req.params.id }, { $set: { status: req.body.status } }, {});
-    res.json({ success: true });
-  } catch(e) { res.status(500).json({ error: 'Failed to update.' }); }
+  try { await db.update({ _id: req.params.id }, { $set: { status: req.body.status } }, {}); res.json({ success: true }); }
+  catch(e) { res.status(500).json({ error: 'Failed to update.' }); }
 });
 
 app.delete('/api/admin/registrations/:id', adminAuth, async (req, res) => {
-  try {
-    await db.remove({ _id: req.params.id }, {});
-    res.json({ success: true });
-  } catch(e) { res.status(500).json({ error: 'Failed to delete.' }); }
+  try { await db.remove({ _id: req.params.id }, {}); res.json({ success: true }); }
+  catch(e) { res.status(500).json({ error: 'Failed to delete.' }); }
 });
 
 app.get('/api/admin/export', adminAuth, async (req, res) => {
   try {
     const records = await db.find({}).sort({ createdAt: 1 });
     const rows = records.map((r,i) => ({
-      '#':                    i + 1,
-      'Registration ID':      r.registrationId,
-      'Status':               r.status,
-      'Full Name':            r.name,
-      'Email':                r.email,
-      'Phone':                r.phone,
-      'Organization':         r.organization || '—',
-      'Job Title':            r.jobTitle || '—',
-      'Department':           r.department || '—',
-      'Country':              r.country || '—',
-      'Dietary Requirements': r.diet || 'None',
-      'Heard From':           r.source || '—',
-      'Comments':             r.comments || '—',
-      'Registered At':        r.registeredAt
+      '#': i+1, 'Registration ID': r.registrationId, 'Status': r.status,
+      'Full Name': r.name, 'Email': r.email, 'Phone': r.phone,
+      'Organization': r.organization||'—', 'Job Title': r.jobTitle||'—',
+      'Department': r.department||'—', 'Country': r.country||'—',
+      'Dietary Requirements': r.diet||'None', 'Heard From': r.source||'—',
+      'Comments': r.comments||'—', 'Registered At': r.registeredAt
     }));
     const ws = XLSX.utils.json_to_sheet(rows);
-    ws['!cols'] = [4,14,12,22,26,16,22,18,20,14,20,16,30,22].map(w => ({ wch: w }));
+    ws['!cols'] = [4,14,12,22,26,16,22,18,20,14,20,16,30,22].map(w=>({wch:w}));
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Registrations');
-    const buffer = XLSX.write(wb, { type: 'buffer', bookType: 'xlsx' });
+    const buffer = XLSX.write(wb, { type:'buffer', bookType:'xlsx' });
     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
     res.setHeader('Content-Disposition', `attachment; filename="tanfish_registrations_${new Date().toISOString().slice(0,10)}.xlsx"`);
     res.send(buffer);
@@ -387,13 +364,11 @@ app.get('/api/admin/export', adminAuth, async (req, res) => {
 app.get('/api/admin/stats', adminAuth, async (req, res) => {
   try {
     const records = await db.find({}).sort({ createdAt: 1 });
-    const byCountry = {}, byDay = {}, byStatus = { Confirmed: 0, Pending: 0, Cancelled: 0 };
+    const byCountry={}, byDay={}, byStatus={Confirmed:0,Pending:0,Cancelled:0};
     records.forEach(r => {
-      const c = r.country || 'Unknown';
-      byCountry[c] = (byCountry[c] || 0) + 1;
-      const day = r.createdAt ? new Date(r.createdAt).toISOString().slice(0, 10) : 'Unknown';
-      byDay[day] = (byDay[day] || 0) + 1;
-      if (r.status) byStatus[r.status] = (byStatus[r.status] || 0) + 1;
+      const c = r.country||'Unknown'; byCountry[c]=(byCountry[c]||0)+1;
+      const day = r.createdAt ? new Date(r.createdAt).toISOString().slice(0,10) : 'Unknown'; byDay[day]=(byDay[day]||0)+1;
+      if(r.status) byStatus[r.status]=(byStatus[r.status]||0)+1;
     });
     res.json({ total: records.length, byCountry, byDay, byStatus });
   } catch(e) { res.status(500).json({ error: 'Stats failed.' }); }
@@ -405,5 +380,6 @@ app.listen(PORT, () => {
   console.log(`   Public form  → http://localhost:${PORT}/`);
   console.log(`   Admin panel  → http://localhost:${PORT}/admin.html`);
   console.log(`   Admin pass   → ${CONFIG.adminPassword}`);
-  console.log(`   Email        → ${CONFIG.gmailUser !== 'YOUR_GMAIL@gmail.com' ? '✅ Configured' : '⚠️  Not configured yet'}\n`);
+  const emailReady = CONFIG.gmailUser !== 'YOUR_GMAIL@gmail.com';
+  console.log(`   Email        → ${emailReady ? '✅ Configured' : '⚠️  Not configured yet (open server.js to add Gmail)'}\n`);
 });
