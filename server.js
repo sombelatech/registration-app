@@ -20,7 +20,7 @@ const CONFIG = {
   eventLocation: 'Dar es Salaam, Tanzania',
   eventWebsite: 'https://tanfishmarket.com/',
   registrationDeadline: '2026-07-21',
-  adminPassword: 'admin1234',          // ← change this!
+  adminPassword: 'Tanfish@2026',          // ← updated admin password
   adminEmail:   'YOUR_EMAIL@gmail.com', // ← your personal email to receive notifications
   // ── Gmail sender (fill after creating Gmail account) ──
   gmailUser:    'YOUR_GMAIL@gmail.com', // ← sender Gmail address

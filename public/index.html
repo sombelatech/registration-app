@@ -35,11 +35,12 @@
     }
     .hero-icon { font-size: 52px; color: var(--yellow); margin-bottom: 12px; animation: floatIn 0.8s ease; }
     .hero h1 {
-      font-size: clamp(26px, 5vw, 52px); font-weight: 900; line-height: 1.12;
+      font-size: clamp(22px, 4.5vw, 44px); font-weight: 900; line-height: 1.12;
       letter-spacing: 0.02em; text-transform: uppercase;
       color: var(--yellow); text-shadow: 0 3px 16px rgba(0,0,0,0.6);
       margin-bottom: 12px; animation: floatIn 0.9s ease;
     }
+    .hero-desc { margin-top: 10px; max-width:920px; color: rgba(255,255,255,0.9); font-size:14px; line-height:1.45; }
     .hero-tagline {
       font-size: clamp(13px, 2vw, 18px); font-weight: 600; letter-spacing: 0.18em;
       color: rgba(255,255,255,0.88); text-transform: uppercase;
@@ -230,7 +231,7 @@
       <div class="cd-box"><div class="cd-num" id="cd-mins">--</div><div class="cd-label">Minutes</div></div>
       <div class="cd-box"><div class="cd-num" id="cd-secs">--</div><div class="cd-label">Seconds</div></div>
     </div>
-    <div class="reg-counter"><i class="fa-solid fa-users"></i> &nbsp;<strong id="reg-count">...</strong> people already registered</div>
+    <p class="hero-desc">Join 200+ fisheries, business, government, and development leaders at Tanzania's premier forum dedicated to strengthening fisheries trade, expanding market opportunities, and accelerating digital transformation across the fisheries value chain. The forum brings together fishers, traders, processors, buyers, exporters, financial institutions, technology providers, government agencies, and development partners for buyer–seller matchmaking, financing consultations, business exhibitions, networking, and the TANFISH Market showcase.</p>
     <div class="deadline-badge"><i class="fa-solid fa-clock"></i> &nbsp;Registration closes: <span id="deadline-text">...</span></div>
   </div>
 </div>
@@ -386,13 +387,9 @@
   // Load config & count
   async function init() {
     try {
-      const [cfg, cnt] = await Promise.all([
-        fetch(API + '/api/config').then(r => r.json()),
-        fetch(API + '/api/count').then(r => r.json())
-      ]);
+      const cfg = await fetch(API + '/api/config').then(r => r.json());
       document.getElementById('hero-date').textContent = new Date(cfg.eventDate).toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' });
       document.getElementById('hero-location').textContent = cfg.eventLocation;
-      document.getElementById('reg-count').textContent = cnt.count;
       document.getElementById('deadline-text').textContent = new Date(cfg.registrationDeadline).toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' });
       eventDate = new Date(cfg.eventDate);
       startCountdown(eventDate);
@@ -482,8 +479,7 @@
       document.getElementById('reg-id-display').textContent = data.id;
       document.getElementById('form-card').style.display = 'none';
       document.getElementById('success-card').style.display = 'block';
-      // refresh count
-      fetch(API + '/api/count').then(r=>r.json()).then(d => document.getElementById('reg-count').textContent = d.count);
+      // refresh count (hidden from public view)
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch(e) { showError('Could not connect to server. Make sure the server is running.'); }
     finally {
