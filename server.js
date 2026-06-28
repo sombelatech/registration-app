@@ -283,7 +283,7 @@ app.post('/api/register', async (req, res) => {
     deadline.setHours(23, 59, 59);
     if (now > deadline) return res.status(403).json({ error: 'Registration is now closed. The deadline has passed.' });
 
-    const { name, email, phone, organization, jobTitle, department, country, diet, source, comments } = req.body;
+    const { name, email, phone, organization, jobTitle, department, country, participantType, participantTypeOther, paymentPackage, paymentReference, comments } = req.body;
     if (!name || !email || !phone) return res.status(400).json({ error: 'Name, email, and phone are required.' });
 
     const existing = await db.findOne({ email: email.toLowerCase().trim() });
@@ -295,7 +295,8 @@ app.post('/api/register', async (req, res) => {
       name: name.trim(), email: email.toLowerCase().trim(), phone: phone.trim(),
       organization: organization?.trim() || '', jobTitle: jobTitle?.trim() || '',
       department: department?.trim() || '', country: country?.trim() || '',
-      diet: diet?.trim() || 'None', source: source?.trim() || '',
+      participantType: participantType?.trim() || '', participantTypeOther: participantTypeOther?.trim() || '',
+      paymentPackage: paymentPackage?.trim() || '', paymentReference: paymentReference?.trim() || '',
       comments: comments?.trim() || '', status: 'Confirmed',
       registeredAt: new Date().toLocaleString('en-TZ', { timeZone: 'Africa/Dar_es_Salaam' }),
       createdAt: new Date()
@@ -347,7 +348,8 @@ app.get('/api/admin/export', adminAuth, async (req, res) => {
       'Full Name': r.name, 'Email': r.email, 'Phone': r.phone,
       'Organization': r.organization||'—', 'Job Title': r.jobTitle||'—',
       'Department': r.department||'—', 'Country': r.country||'—',
-      'Dietary Requirements': r.diet||'None', 'Heard From': r.source||'—',
+      'Registration Type': r.participantType||'—', 'Role Details': r.participantTypeOther||'—',
+      'Payment Package': r.paymentPackage||'—', 'Payment Reference': r.paymentReference||'—',
       'Comments': r.comments||'—', 'Registered At': r.registeredAt
     }));
     const ws = XLSX.utils.json_to_sheet(rows);
