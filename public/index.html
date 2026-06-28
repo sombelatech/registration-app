@@ -3,87 +3,144 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Event Registration</title>
+  <title>TANFISH Forum 2026 — Registration</title>
+  <link rel="icon" href="logo.png" type="image/png"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --bg: #f5f5f5; --surface: #ffffff; --border: #d4d4d4;
-      --text: #000000; --muted: #38574D; --hint: #6b7c75;
-      --accent: #0864AF; --accent-fg: #ffffff;
-      --success-bg: #e8f3ed; --success-border: #38574D; --success-text: #38574D;
-      --danger: #DE0500; --radius: 10px; --radius-sm: 6px;
-      --primary: #0864AF; --secondary: #38574D; --accent-yellow: #F6B418; --white: #ffffff; --black: #000000;
+      --blue: #0864AF; --blue-dark: #054d85; --green: #38574D; --yellow: #F6B418;
+      --danger: #DE0500; --surface: #fff; --border: #dde3ea;
+      --text: #1a1a1a; --muted: #556370; --hint: #8a9aa8;
+      --radius: 12px; --radius-sm: 7px;
     }
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background: url('bg.jpg') center center / cover no-repeat fixed;
       color: var(--text); min-height: 100vh; padding: 0;
     }
-    body::before {
-      content: ''; position: fixed; inset: 0;
-      background: rgba(0, 20, 50, 0.55); z-index: 0;
-    }
+    body::before { content:''; position:fixed; inset:0; background:rgba(0,18,45,0.62); z-index:0; }
 
-    /* ── Full-width heading banner ── */
+    /* ── HERO ── */
     .hero {
-      position: relative; z-index: 1;
-      width: 100%; background: rgba(6, 50, 110, 0.88);
-      border-bottom: 5px solid var(--accent-yellow);
-      backdrop-filter: blur(10px);
-      padding: 48px 40px;
-      text-align: center;
-      box-shadow: 0 6px 32px rgba(0,0,0,0.5);
+      position: relative; z-index: 1; width: 100%;
+      background: rgba(5,40,95,0.90); border-bottom: 5px solid var(--yellow);
+      backdrop-filter: blur(12px); padding: 0;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.55);
     }
-    .hero .icon { font-size: 48px; color: var(--accent-yellow); margin-bottom: 16px; }
+    .hero-inner {
+      max-width: 1100px; margin: 0 auto;
+      padding: 40px 32px 36px;
+      display: flex; flex-direction: column; align-items: center; text-align: center;
+    }
+    .hero-icon { font-size: 52px; color: var(--yellow); margin-bottom: 12px; animation: floatIn 0.8s ease; }
     .hero h1 {
-      font-size: 52px; font-weight: 900; line-height: 1.15;
-      letter-spacing: 0.03em; text-transform: uppercase;
-      color: var(--accent-yellow);
-      text-shadow: 0 3px 14px rgba(0,0,0,0.6);
-      margin-bottom: 14px;
+      font-size: clamp(26px, 5vw, 52px); font-weight: 900; line-height: 1.12;
+      letter-spacing: 0.02em; text-transform: uppercase;
+      color: var(--yellow); text-shadow: 0 3px 16px rgba(0,0,0,0.6);
+      margin-bottom: 12px; animation: floatIn 0.9s ease;
     }
-    .hero p {
-      font-size: 20px; font-weight: 500;
-      color: rgba(255,255,255,0.9);
-      text-shadow: 0 2px 6px rgba(0,0,0,0.4);
-      letter-spacing: 0.05em;
+    .hero-tagline {
+      font-size: clamp(13px, 2vw, 18px); font-weight: 600; letter-spacing: 0.18em;
+      color: rgba(255,255,255,0.88); text-transform: uppercase;
+      margin-bottom: 28px; animation: floatIn 1s ease;
     }
-    @media(max-width: 768px){
-      .hero { padding: 32px 20px; }
-      .hero .icon { font-size: 32px; }
-      .hero h1 { font-size: 28px; }
-      .hero p { font-size: 15px; }
+    .hero-meta {
+      display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;
+      animation: floatIn 1.1s ease;
+    }
+    .hero-meta-item {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 14px; color: rgba(255,255,255,0.85);
+      background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 50px; padding: 7px 16px; backdrop-filter: blur(4px);
+    }
+    .hero-meta-item i { color: var(--yellow); }
+
+    /* countdown */
+    .countdown {
+      display: flex; gap: 16px; justify-content: center;
+      margin-top: 28px; animation: floatIn 1.2s ease;
+    }
+    .cd-box {
+      text-align: center; background: rgba(246,180,24,0.15);
+      border: 2px solid var(--yellow); border-radius: 10px;
+      padding: 10px 18px; min-width: 72px;
+    }
+    .cd-num { font-size: 32px; font-weight: 900; color: var(--yellow); line-height: 1; }
+    .cd-label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.7); margin-top: 4px; }
+
+    /* registrant counter */
+    .reg-counter {
+      margin-top: 20px; font-size: 14px; color: rgba(255,255,255,0.8);
+      background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 50px; padding: 6px 18px; display: inline-block;
+      animation: floatIn 1.3s ease;
+    }
+    .reg-counter strong { color: var(--yellow); }
+
+    /* deadline badge */
+    .deadline-badge {
+      margin-top: 14px; font-size: 13px; font-weight: 600;
+      color: #fff; background: rgba(222,5,0,0.7);
+      border: 1px solid rgba(222,5,0,0.9); border-radius: 50px;
+      padding: 5px 16px; display: inline-block; animation: floatIn 1.4s ease;
     }
 
-    /* ── Form area ── */
-    .wrap { max-width: 760px; margin: 0 auto; position: relative; z-index: 1; padding: 2.5rem 1.5rem 4rem; }
+    @keyframes floatIn { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:none; } }
 
-    .sub-header { text-align: center; margin-bottom: 1.75rem; }
-    .sub-header p { font-size: 15px; color: rgba(255,255,255,0.85); text-shadow: 0 1px 4px rgba(0,0,0,0.4); }
+    /* ── FORM WRAP ── */
+    .page-wrap { max-width: 680px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; position: relative; z-index: 1; }
 
+    /* progress bar */
+    .progress-wrap { margin-bottom: 1.75rem; animation: floatIn 0.7s ease; }
+    .progress-steps { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+    .step-dot {
+      display: flex; flex-direction: column; align-items: center; gap: 5px; cursor: default;
+    }
+    .step-circle {
+      width: 36px; height: 36px; border-radius: 50%; font-size: 14px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      border: 2px solid var(--border); background: var(--surface); color: var(--hint);
+      transition: all 0.3s;
+    }
+    .step-dot.active .step-circle { background: var(--blue); border-color: var(--blue); color: #fff; box-shadow: 0 0 0 4px rgba(8,100,175,0.2); }
+    .step-dot.done .step-circle { background: var(--green); border-color: var(--green); color: #fff; }
+    .step-label { font-size: 11px; font-weight: 600; color: var(--hint); text-transform: uppercase; letter-spacing: 0.06em; }
+    .step-dot.active .step-label { color: var(--blue); }
+    .step-dot.done .step-label { color: var(--green); }
+    .step-line { flex: 1; height: 2px; background: var(--border); margin: 0 8px; margin-bottom: 20px; transition: background 0.3s; }
+    .step-line.done { background: var(--green); }
+    .progress-bar-outer { height: 4px; background: var(--border); border-radius: 50px; overflow: hidden; }
+    .progress-bar-inner { height: 100%; background: linear-gradient(90deg, var(--blue), var(--yellow)); border-radius: 50px; transition: width 0.5s ease; }
+
+    /* card */
     .card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-top: 4px solid var(--accent);
-      border-radius: var(--radius); padding: 2rem;
-      box-shadow: 0 4px 20px rgba(8, 100, 175, 0.1);
+      background: var(--surface); border-radius: var(--radius);
+      border-top: 4px solid var(--blue);
+      padding: 2rem; box-shadow: 0 8px 40px rgba(0,0,0,0.18);
+      animation: floatIn 0.6s ease;
     }
+
+    .step-panel { display: none; }
+    .step-panel.active { display: block; animation: slideIn 0.35s ease; }
+    @keyframes slideIn { from { opacity:0; transform:translateX(22px); } to { opacity:1; transform:none; } }
+
+    .step-title { font-size: 16px; font-weight: 700; color: var(--blue); margin-bottom: 1.25rem; display: flex; align-items: center; gap: 8px; }
+    .step-title i { color: var(--yellow); }
 
     .section-label {
-      font-size: 11px; font-weight: 600; letter-spacing: 0.1em;
-      text-transform: uppercase; color: var(--secondary);
-      margin: 1.5rem 0 1rem; padding-bottom: 8px; padding-left: 10px;
-      border-bottom: 2px solid var(--secondary);
-      border-left: 3px solid var(--accent-yellow);
+      font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--green); margin: 1.25rem 0 0.75rem; padding: 6px 10px;
+      border-left: 3px solid var(--yellow); border-bottom: 1px solid var(--border);
     }
-    .section-label:first-child { margin-top: 0; }
 
     .field { margin-bottom: 1rem; }
-    .field label { display: block; font-size: 13px; font-weight: 500; color: var(--muted); margin-bottom: 5px; }
+    .field label { display: block; font-size: 13px; font-weight: 600; color: var(--muted); margin-bottom: 5px; }
     .field label .req { color: var(--danger); margin-left: 2px; }
     .field input, .field select, .field textarea {
       width: 100%; padding: 10px 13px; font-size: 15px;
-      background: #fafbfc; border: 1px solid #d0d8e0;
+      background: #f8fafc; border: 1.5px solid var(--border);
       border-radius: var(--radius-sm); color: var(--text);
       font-family: inherit; transition: border-color 0.15s, box-shadow 0.15s;
       -webkit-appearance: none; appearance: none;
@@ -93,76 +150,131 @@
       background-repeat: no-repeat; background-position: right 13px center; padding-right: 36px; cursor: pointer;
     }
     .field input:focus, .field select:focus, .field textarea:focus {
-      outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(8, 100, 175, 0.15);
+      outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px rgba(8,100,175,0.12); background: #fff;
     }
-    .field input.error, .field select.error { border-color: var(--danger); }
     .field textarea { resize: vertical; min-height: 88px; }
     .row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
     @media(max-width:520px){ .row { grid-template-columns: 1fr; } }
 
-    .submit-btn {
-      width: 100%; padding: 13px; font-size: 15px; font-weight: 600;
-      background: var(--accent); color: var(--accent-fg);
-      border: none; border-radius: var(--radius-sm); cursor: pointer;
-      margin-top: 0.75rem; transition: opacity 0.15s, transform 0.1s;
-      display: flex; align-items: center; justify-content: center; gap: 9px;
+    /* buttons */
+    .btn-row { display: flex; gap: 10px; margin-top: 1.5rem; }
+    .btn {
+      padding: 12px 24px; font-size: 15px; font-weight: 600; border: none;
+      border-radius: var(--radius-sm); cursor: pointer;
+      display: inline-flex; align-items: center; gap: 8px; transition: all 0.15s;
     }
-    .submit-btn:hover:not(:disabled) { opacity: 0.85; }
-    .submit-btn:active { transform: scale(0.99); }
-    .submit-btn:disabled { opacity: 0.55; cursor: not-allowed; }
+    .btn-primary { background: var(--blue); color: #fff; flex: 1; justify-content: center; }
+    .btn-primary:hover:not(:disabled) { background: var(--blue-dark); }
+    .btn-primary:disabled { opacity: 0.55; cursor: not-allowed; }
+    .btn-secondary { background: #f0f4f8; color: var(--muted); border: 1.5px solid var(--border); }
+    .btn-secondary:hover { background: #e4eaf0; }
 
-    .success {
-      display: none; text-align: center; padding: 3rem 1.5rem;
-      background: linear-gradient(135deg, #e8f3ed 0%, #f0f7ff 100%);
-      border: 1px solid var(--success-border);
-      border-left: 4px solid var(--secondary);
-      border-radius: var(--radius); box-shadow: 0 4px 20px rgba(56, 87, 77, 0.15);
-    }
-    .success .icon { font-size: 42px; color: var(--success-text); margin-bottom: 14px; }
-    .success h2 { font-size: 22px; font-weight: 700; color: var(--success-text); margin-bottom: 8px; }
-    .success p { font-size: 15px; color: var(--muted); margin-bottom: 1.5rem; }
-    .btn-outline {
-      padding: 10px 20px; font-size: 14px; font-weight: 500;
-      border: 1px solid var(--secondary); border-radius: var(--radius-sm);
-      background: var(--surface); color: var(--secondary); cursor: pointer;
-      display: inline-flex; align-items: center; gap: 7px;
-      transition: background 0.12s, color 0.12s;
-    }
-    .btn-outline:hover { background: #e8f3ed; color: #1a3a2f; }
-
+    /* error */
     .error-msg {
-      border: 1px solid #f5c0bc; border-left: 3px solid var(--danger);
+      border: 1.5px solid #f5c0bc; border-left: 4px solid var(--danger);
       border-radius: var(--radius-sm); padding: 10px 14px;
       font-size: 13px; color: var(--danger); margin-bottom: 1rem;
-      display: none; align-items: center; gap: 8px;
-      background: #fff5f5; box-shadow: 0 2px 8px rgba(222, 5, 0, 0.12);
+      display: none; align-items: center; gap: 8px; background: #fff5f5;
     }
-    .spinner { display: none; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.4); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; }
-    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* success */
+    .success-card {
+      display: none; text-align: center; padding: 3rem 2rem;
+      background: var(--surface); border-radius: var(--radius);
+      box-shadow: 0 8px 40px rgba(0,0,0,0.18); animation: floatIn 0.6s ease;
+    }
+    .success-icon { font-size: 56px; color: var(--green); margin-bottom: 16px; }
+    .success-card h2 { font-size: 24px; font-weight: 800; color: var(--green); margin-bottom: 8px; }
+    .success-card p { font-size: 15px; color: var(--muted); margin-bottom: 6px; }
+    .reg-id-box {
+      background: linear-gradient(135deg, #e8f3ed, #f0f7ff);
+      border: 2px solid var(--green); border-radius: 10px;
+      padding: 14px 20px; margin: 1.25rem auto; display: inline-block;
+      font-size: 22px; font-weight: 900; color: var(--blue); letter-spacing: 0.1em;
+    }
+    .reg-id-label { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--hint); margin-bottom: 4px; }
+
+    /* closed */
+    .closed-card {
+      display: none; text-align: center; padding: 3rem 2rem;
+      background: var(--surface); border-radius: var(--radius);
+      box-shadow: 0 8px 40px rgba(0,0,0,0.18); border-top: 4px solid var(--danger);
+    }
+    .closed-card i { font-size: 48px; color: var(--danger); margin-bottom: 14px; }
+    .closed-card h2 { font-size: 22px; font-weight: 800; color: var(--danger); margin-bottom: 8px; }
+    .closed-card p { font-size: 15px; color: var(--muted); }
+
+    .spinner { display:none; width:16px; height:16px; border:2px solid rgba(255,255,255,0.4); border-top-color:#fff; border-radius:50%; animation:spin 0.7s linear infinite; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+
     .admin-link { text-align: center; margin-top: 1.25rem; font-size: 13px; }
-    .admin-link a { color: rgba(255,255,255,0.75); text-decoration: none; }
-    .admin-link a:hover { text-decoration: underline; color: #fff; }
+    .admin-link a { color: rgba(255,255,255,0.65); text-decoration: none; }
+    .admin-link a:hover { color: #fff; }
   </style>
 </head>
 <body>
 
-  <!-- ── FULL WIDTH HEADING ── -->
-  <div class="hero">
-    <div class="icon"><i class="fa-solid fa-fish"></i></div>
-    <h1>Tanzania Digital Fisheries Trade &amp;<br>Market Linkages Forum 2026</h1>
-    <p>BUY &nbsp;·&nbsp; SELL &nbsp;·&nbsp; CONNECT &nbsp;·&nbsp; GROW</p>
+<!-- ── HERO BANNER ── -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-icon"><img src="logo.png" alt="TANFISH" style="height:90px;width:auto;filter:drop-shadow(0 4px 12px rgba(0,0,0,0.4));"/></div>
+    <h1 id="hero-title">Tanzania Digital Fisheries Trade &amp;<br>Market Linkages Forum 2026</h1>
+    <p class="hero-tagline">Buy &nbsp;·&nbsp; Sell &nbsp;·&nbsp; Connect &nbsp;·&nbsp; Grow</p>
+    <div class="hero-meta">
+      <div class="hero-meta-item"><i class="fa-solid fa-calendar-days"></i> <span id="hero-date">Loading...</span></div>
+      <div class="hero-meta-item"><i class="fa-solid fa-location-dot"></i> <span id="hero-location">Loading...</span></div>
+    </div>
+    <div class="countdown" id="countdown">
+      <div class="cd-box"><div class="cd-num" id="cd-days">--</div><div class="cd-label">Days</div></div>
+      <div class="cd-box"><div class="cd-num" id="cd-hours">--</div><div class="cd-label">Hours</div></div>
+      <div class="cd-box"><div class="cd-num" id="cd-mins">--</div><div class="cd-label">Minutes</div></div>
+      <div class="cd-box"><div class="cd-num" id="cd-secs">--</div><div class="cd-label">Seconds</div></div>
+    </div>
+    <div class="reg-counter"><i class="fa-solid fa-users"></i> &nbsp;<strong id="reg-count">...</strong> people already registered</div>
+    <div class="deadline-badge"><i class="fa-solid fa-clock"></i> &nbsp;Registration closes: <span id="deadline-text">...</span></div>
+  </div>
+</div>
+
+<!-- ── FORM ── -->
+<div class="page-wrap">
+
+  <!-- Progress -->
+  <div class="progress-wrap" id="progress-wrap">
+    <div class="progress-steps">
+      <div class="step-dot active" id="dot-1">
+        <div class="step-circle">1</div>
+        <div class="step-label">Personal</div>
+      </div>
+      <div class="step-line" id="line-1"></div>
+      <div class="step-dot" id="dot-2">
+        <div class="step-circle">2</div>
+        <div class="step-label">Professional</div>
+      </div>
+      <div class="step-line" id="line-2"></div>
+      <div class="step-dot" id="dot-3">
+        <div class="step-circle">3</div>
+        <div class="step-label">Preferences</div>
+      </div>
+    </div>
+    <div class="progress-bar-outer">
+      <div class="progress-bar-inner" id="progress-bar" style="width:16%"></div>
+    </div>
   </div>
 
-  <!-- ── FORM ── -->
-  <div class="wrap">
-    <div class="sub-header">
-      <p>Fill in your details below to register. Fields marked <span style="color:#f87171">*</span> are required.</p>
-    </div>
+  <!-- Closed card -->
+  <div class="closed-card" id="closed-card">
+    <i class="fa-solid fa-lock"></i>
+    <h2>Registration Closed</h2>
+    <p>The registration deadline for this event has passed.<br>Please contact the organizers for more information.</p>
+  </div>
 
-    <div class="card" id="form-card">
-      <div id="error-box" class="error-msg"><i class="fa-solid fa-circle-exclamation"></i><span id="error-text"></span></div>
+  <!-- Form card -->
+  <div class="card" id="form-card">
+    <div id="error-box" class="error-msg"><i class="fa-solid fa-circle-exclamation"></i><span id="error-text"></span></div>
 
-      <div class="section-label">Personal information</div>
+    <!-- Step 1: Personal -->
+    <div class="step-panel active" id="step-1">
+      <div class="step-title"><i class="fa-solid fa-user"></i> Personal Information</div>
       <div class="row">
         <div class="field">
           <label>Full name <span class="req">*</span></label>
@@ -183,8 +295,14 @@
           <input type="text" id="f-country" placeholder="e.g. Tanzania" autocomplete="country-name"/>
         </div>
       </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="nextStep(1)">Next &nbsp;<i class="fa-solid fa-arrow-right"></i></button>
+      </div>
+    </div>
 
-      <div class="section-label">Professional information</div>
+    <!-- Step 2: Professional -->
+    <div class="step-panel" id="step-2">
+      <div class="step-title"><i class="fa-solid fa-briefcase"></i> Professional Information</div>
       <div class="row">
         <div class="field">
           <label>Organization</label>
@@ -199,29 +317,31 @@
         <label>Department / Faculty</label>
         <input type="text" id="f-dept" placeholder="e.g. Research &amp; Innovation"/>
       </div>
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="prevStep(2)"><i class="fa-solid fa-arrow-left"></i> &nbsp;Back</button>
+        <button class="btn btn-primary" onclick="nextStep(2)">Next &nbsp;<i class="fa-solid fa-arrow-right"></i></button>
+      </div>
+    </div>
 
-      <div class="section-label">Event preferences</div>
+    <!-- Step 3: Preferences -->
+    <div class="step-panel" id="step-3">
+      <div class="step-title"><i class="fa-solid fa-sliders"></i> Event Preferences</div>
       <div class="row">
         <div class="field">
           <label>Dietary requirements</label>
           <select id="f-diet">
             <option value="None">None / not applicable</option>
-            <option>Vegetarian</option>
-            <option>Vegan</option>
-            <option>Halal</option>
-            <option>Kosher</option>
-            <option>Gluten-free</option>
-            <option>Other</option>
+            <option>Vegetarian</option><option>Vegan</option>
+            <option>Halal</option><option>Kosher</option>
+            <option>Gluten-free</option><option>Other</option>
           </select>
         </div>
         <div class="field">
           <label>How did you hear about this event?</label>
           <select id="f-source">
             <option value="">Select an option</option>
-            <option>Email invitation</option>
-            <option>Social media</option>
-            <option>Colleague / friend</option>
-            <option>Organization website</option>
+            <option>Email invitation</option><option>Social media</option>
+            <option>Colleague / friend</option><option>Organization website</option>
             <option>Other</option>
           </select>
         </div>
@@ -230,42 +350,117 @@
         <label>Additional comments</label>
         <textarea id="f-comments" placeholder="Any special requirements or questions..."></textarea>
       </div>
-
-      <button class="submit-btn" id="submit-btn" onclick="submitForm()">
-        <span class="spinner" id="spinner"></span>
-        <i class="fa-solid fa-paper-plane" id="send-icon"></i>
-        <span id="btn-text">Submit registration</span>
-      </button>
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="prevStep(3)"><i class="fa-solid fa-arrow-left"></i> &nbsp;Back</button>
+        <button class="btn btn-primary" id="submit-btn" onclick="submitForm()">
+          <span class="spinner" id="spinner"></span>
+          <i class="fa-solid fa-paper-plane" id="send-icon"></i>
+          <span id="btn-text">Submit Registration</span>
+        </button>
+      </div>
     </div>
-
-    <div class="success" id="success-card">
-      <div class="icon"><i class="fa-solid fa-circle-check"></i></div>
-      <h2>You're registered!</h2>
-      <p>Thank you — your registration has been saved successfully.<br>We look forward to seeing you at the Forum.</p>
-      <button class="btn-outline" onclick="resetForm()">
-        <i class="fa-solid fa-plus"></i> Register another person
-      </button>
-    </div>
-
-    <p class="admin-link"><a href="/admin.html"><i class="fa-solid fa-lock"></i> Admin panel</a></p>
   </div>
+
+  <!-- Success -->
+  <div class="success-card" id="success-card">
+    <div class="success-icon"><i class="fa-solid fa-circle-check"></i></div>
+    <h2>You're Registered!</h2>
+    <p>Thank you for registering. Your registration ID is:</p>
+    <div class="reg-id-label">Registration ID</div>
+    <div class="reg-id-box" id="reg-id-display">TF2026-0001</div>
+    <p style="margin-top:10px">Please save this ID for your records.<br>We look forward to seeing you at the Forum!</p>
+    <br>
+    <button class="btn btn-secondary" onclick="resetForm()" style="margin:0 auto">
+      <i class="fa-solid fa-plus"></i> Register another person
+    </button>
+  </div>
+
+  <p class="admin-link"><a href="/admin.html"><i class="fa-solid fa-lock"></i> Admin panel</a></p>
+</div>
 
 <script>
   const API = '';
-  function g(id){ return document.getElementById(id).value.trim(); }
-  function showError(msg){
-    const box = document.getElementById('error-box');
-    document.getElementById('error-text').textContent = msg;
-    box.style.display = 'flex';
-    box.scrollIntoView({ behavior:'smooth', block:'center' });
-  }
-  function hideError(){ document.getElementById('error-box').style.display = 'none'; }
+  let currentStep = 1;
+  let eventDate = null;
 
-  async function submitForm(){
+  // Load config & count
+  async function init() {
+    try {
+      const [cfg, cnt] = await Promise.all([
+        fetch(API + '/api/config').then(r => r.json()),
+        fetch(API + '/api/count').then(r => r.json())
+      ]);
+      document.getElementById('hero-date').textContent = new Date(cfg.eventDate).toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' });
+      document.getElementById('hero-location').textContent = cfg.eventLocation;
+      document.getElementById('reg-count').textContent = cnt.count;
+      document.getElementById('deadline-text').textContent = new Date(cfg.registrationDeadline).toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' });
+      eventDate = new Date(cfg.eventDate);
+      startCountdown(eventDate);
+
+      // Check deadline
+      const now = new Date();
+      const deadline = new Date(cfg.registrationDeadline);
+      deadline.setHours(23,59,59);
+      if (now > deadline) {
+        document.getElementById('form-card').style.display = 'none';
+        document.getElementById('progress-wrap').style.display = 'none';
+        document.getElementById('closed-card').style.display = 'block';
+      }
+    } catch(e) { console.error(e); }
+  }
+
+  function startCountdown(target) {
+    function tick() {
+      const diff = target - new Date();
+      if (diff <= 0) { document.getElementById('countdown').innerHTML = '<div style="color:var(--yellow);font-weight:700;font-size:18px">Event is happening now!</div>'; return; }
+      const d = Math.floor(diff / 86400000);
+      const h = Math.floor((diff % 86400000) / 3600000);
+      const m = Math.floor((diff % 3600000) / 60000);
+      const s = Math.floor((diff % 60000) / 1000);
+      document.getElementById('cd-days').textContent = String(d).padStart(2,'0');
+      document.getElementById('cd-hours').textContent = String(h).padStart(2,'0');
+      document.getElementById('cd-mins').textContent = String(m).padStart(2,'0');
+      document.getElementById('cd-secs').textContent = String(s).padStart(2,'0');
+    }
+    tick(); setInterval(tick, 1000);
+  }
+
+  function g(id) { return document.getElementById(id).value.trim(); }
+  function showError(msg) {
+    const b = document.getElementById('error-box');
+    document.getElementById('error-text').textContent = msg;
+    b.style.display = 'flex'; b.scrollIntoView({ behavior:'smooth', block:'center' });
+  }
+  function hideError() { document.getElementById('error-box').style.display = 'none'; }
+
+  function setStep(s) {
+    [1,2,3].forEach(i => {
+      document.getElementById('step-'+i).classList.toggle('active', i === s);
+      const dot = document.getElementById('dot-'+i);
+      dot.classList.remove('active','done');
+      if (i === s) dot.classList.add('active');
+      else if (i < s) dot.classList.add('done');
+      if (i < 3) document.getElementById('line-'+i).classList.toggle('done', i < s);
+    });
+    const pct = s === 1 ? 16 : s === 2 ? 50 : 84;
+    document.getElementById('progress-bar').style.width = pct + '%';
+    currentStep = s;
     hideError();
-    const name = g('f-name'), email = g('f-email'), phone = g('f-phone');
-    if (!name || !email || !phone){ showError('Please fill in all required fields: Full name, Email, and Phone number.'); return; }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ showError('Please enter a valid email address.'); return; }
+    window.scrollTo({ top: document.getElementById('form-card').offsetTop - 20, behavior:'smooth' });
+  }
+
+  function nextStep(from) {
+    if (from === 1) {
+      const name = g('f-name'), email = g('f-email'), phone = g('f-phone');
+      if (!name || !email || !phone) { showError('Please fill in your Full name, Email, and Phone number.'); return; }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showError('Please enter a valid email address.'); return; }
+    }
+    setStep(from + 1);
+  }
+  function prevStep(from) { setStep(from - 1); }
+
+  async function submitForm() {
+    hideError();
     const btn = document.getElementById('submit-btn');
     btn.disabled = true;
     document.getElementById('spinner').style.display = 'block';
@@ -274,29 +469,40 @@
     try {
       const res = await fetch(API + '/api/register', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, phone, organization: g('f-org'), jobTitle: g('f-title'), department: g('f-dept'), country: g('f-country'), diet: g('f-diet'), source: g('f-source'), comments: g('f-comments') })
+        body: JSON.stringify({
+          name: g('f-name'), email: g('f-email'), phone: g('f-phone'),
+          organization: g('f-org'), jobTitle: g('f-title'), department: g('f-dept'),
+          country: g('f-country'), diet: g('f-diet'), source: g('f-source'), comments: g('f-comments')
+        })
       });
       const data = await res.json();
       if (!res.ok) { showError(data.error || 'Submission failed. Please try again.'); return; }
+      document.getElementById('progress-bar').style.width = '100%';
+      [1,2,3].forEach(i => { document.getElementById('dot-'+i).classList.remove('active'); document.getElementById('dot-'+i).classList.add('done'); });
+      document.getElementById('reg-id-display').textContent = data.id;
       document.getElementById('form-card').style.display = 'none';
       document.getElementById('success-card').style.display = 'block';
+      // refresh count
+      fetch(API + '/api/count').then(r=>r.json()).then(d => document.getElementById('reg-count').textContent = d.count);
       window.scrollTo({ top: 0, behavior: 'smooth' });
-    } catch(e){ showError('Could not connect to server. Make sure the server is running.'); }
+    } catch(e) { showError('Could not connect to server. Make sure the server is running.'); }
     finally {
       btn.disabled = false;
       document.getElementById('spinner').style.display = 'none';
       document.getElementById('send-icon').style.display = 'inline';
-      document.getElementById('btn-text').textContent = 'Submit registration';
+      document.getElementById('btn-text').textContent = 'Submit Registration';
     }
   }
 
-  function resetForm(){
+  function resetForm() {
     ['f-name','f-email','f-phone','f-org','f-title','f-dept','f-country','f-comments'].forEach(id => document.getElementById(id).value = '');
     ['f-diet','f-source'].forEach(id => document.getElementById(id).selectedIndex = 0);
     document.getElementById('form-card').style.display = 'block';
     document.getElementById('success-card').style.display = 'none';
-    hideError();
+    setStep(1); hideError();
   }
+
+  init();
 </script>
 </body>
 </html>

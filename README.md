@@ -1,96 +1,44 @@
-# Event Registration App
+# TANFISH Forum 2026 — Registration System v3.0
 
-A full-stack registration system with a public form and a private admin dashboard.
+## 🚀 Setup
 
----
-
-## 📁 Project structure
-
-```
-registration-app/
-├── server.js          ← Backend (Node.js + Express)
-├── package.json
-├── data/              ← Auto-created; stores the database
-└── public/
-    ├── index.html     ← Public registration form
-    └── admin.html     ← Admin dashboard (password protected)
-```
-
----
-
-## 🚀 How to run
-
-### 1. Install Node.js (if not installed)
-Download from https://nodejs.org — install the LTS version.
-
-### 2. Open a terminal in this folder
-```bash
-cd registration-app
-```
-
-### 3. Install dependencies (first time only)
+### 1. Install dependencies
 ```bash
 npm install
 ```
 
-### 4. Start the server
+### 2. Configure Gmail (for email notifications)
+
+#### Step A — Create Gmail App Password:
+1. Go to myaccount.google.com → Security
+2. Enable 2-Step Verification
+3. Go to Security → App Passwords
+4. Select "Mail" → Generate
+5. Copy the 16-digit password
+
+#### Step B — Open server.js and fill in:
+```js
+adminEmail:  'your-personal@email.com',  // where YOU receive alerts
+gmailUser:   'tanfishforum2026@gmail.com', // the sending Gmail
+gmailPass:   'xxxx xxxx xxxx xxxx',        // 16-digit App Password
+adminPassword: 'your-secure-password',
+```
+
+### 3. Start the server
 ```bash
 node server.js
 ```
 
-You will see:
-```
-✅ Registration app running!
-   Public form  → http://localhost:3000/
-   Admin panel  → http://localhost:3000/admin.html
-   Admin pass   → admin1234
-```
-
-### 5. Open in your browser
+## 🌐 URLs
 - **Public form:** http://localhost:3000/
 - **Admin panel:** http://localhost:3000/admin.html
 
----
+## ✏️ Reuse for another event
+Just change the CONFIG block at the top of server.js:
+- eventName, eventDate, eventLocation
+- registrationDeadline
+- adminPassword, adminEmail
 
-## 🔐 Change the admin password
-
-Open `server.js` and change this line near the top:
-```js
-const ADMIN_PASSWORD = 'admin1234'; // ← Change this!
-```
-
----
-
-## 🌐 Share over your local network (optional)
-
-To let others on the same Wi-Fi submit the form:
-
-1. Find your computer's local IP address:
-   - Windows: run `ipconfig` in Command Prompt → look for IPv4 Address
-   - Mac/Linux: run `ifconfig` → look for inet address
-
-2. Share this URL with people on the same network:
-   `http://YOUR-IP-ADDRESS:3000/`
-
-   Example: `http://192.168.1.10:3000/`
-
-3. Keep your terminal open (server must stay running).
-
----
-
-## 📊 Export to Excel
-
-Log into the admin panel and click **Export Excel** — downloads all registrations as `.xlsx`.
-
----
-
-## 🌍 Deploy online (optional free hosting)
-
-To get a public link anyone on the internet can access:
-
-1. **Railway.app** (easiest): https://railway.app
-   - Sign up → New Project → Deploy from GitHub
-   - Upload this folder and Railway runs it automatically
-
-2. **Render.com**: https://render.com
-   - Create a new Web Service → connect your repo → set start command to `node server.js`
+## 📧 What emails are sent
+- **Registrant** receives: Beautiful HTML invitation with registration ID + QR code
+- **Admin** receives: Instant notification with all registrant details

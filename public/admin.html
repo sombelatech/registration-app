@@ -3,250 +3,235 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Admin — Registrations</title>
+  <title>Admin — TANFISH Forum 2026</title>
+  <link rel="icon" href="logo.png" type="image/png"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --bg: #f5f5f5; --surface: #ffffff; --border: #d4d4d4;
-      --text: #000000; --muted: #38574D; --hint: #6b7c75;
-      --accent: #0864AF; --accent-fg: #ffffff;
-      --green: #38574D; --green-bg: #e8f3ed; --green-border: #38574D;
-      --danger: #DE0500; --danger-bg: #fff5f5; --danger-border: #f5c0bc;
-      --radius: 10px; --radius-sm: 6px;
-      --primary: #0864AF; --secondary: #38574D; --accent-yellow: #F6B418; --white: #ffffff; --black: #000000;
+      --blue: #0864AF; --blue-dark: #054d85; --green: #38574D;
+      --yellow: #F6B418; --danger: #DE0500;
+      --bg: #f0f4f8; --surface: #fff; --border: #dde3ea;
+      --text: #1a1a1a; --muted: #556370; --hint: #8a9aa8;
+      --radius: 12px; --radius-sm: 7px;
+      --confirmed: #1a6b1a; --confirmed-bg: #edfaed;
+      --pending: #7a5c00; --pending-bg: #fff9e6;
+      --cancelled: #8b0000; --cancelled-bg: #fff0f0;
     }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: url('bg.jpg') center center / cover no-repeat fixed;
-      color: var(--text); min-height: 100vh;
-    }
-    body::before {
-      content: ''; position: fixed; inset: 0;
-      background: rgba(0, 20, 50, 0.62); z-index: 0;
-    }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
 
     /* ── Login ── */
-    .login-wrap {
-      min-height: 100vh; display: flex; align-items: center;
-      justify-content: center; padding: 2rem;
-      position: relative; z-index: 1;
-    }
-    .login-card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 2.5rem 2rem;
-      width: 100%; max-width: 380px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
-    }
-    .login-icon { text-align: center; font-size: 36px; color: var(--accent); margin-bottom: 1.25rem; }
-    .login-card h1 { text-align: center; font-size: 22px; font-weight: 700; margin-bottom: 6px; }
-    .login-card p { text-align: center; font-size: 14px; color: var(--muted); margin-bottom: 1.75rem; }
+    .login-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; background: linear-gradient(135deg, #05285f, #0864AF); }
+    .login-card { background: var(--surface); border-radius: var(--radius); padding: 2.5rem 2rem; width: 100%; max-width: 380px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+    .login-logo { text-align: center; font-size: 40px; color: var(--yellow); margin-bottom: 8px; }
+    .login-card h1 { text-align: center; font-size: 20px; font-weight: 800; margin-bottom: 4px; }
+    .login-card .sub { text-align: center; font-size: 13px; color: var(--muted); margin-bottom: 1.75rem; }
     .field { margin-bottom: 1rem; }
-    .field label { display: block; font-size: 13px; font-weight: 500; color: var(--muted); margin-bottom: 5px; }
-    .field input {
-      width: 100%; padding: 10px 13px; font-size: 15px;
-      border: 1px solid var(--border); border-radius: var(--radius-sm);
-      color: var(--text); font-family: inherit;
-      transition: border-color 0.15s, box-shadow 0.15s;
-    }
-    .field input:focus { outline: none; border-color: #999; box-shadow: 0 0 0 3px rgba(0,0,0,0.06); }
-    .login-btn {
-      width: 100%; padding: 12px; font-size: 15px; font-weight: 600;
-      background: var(--accent); color: var(--accent-fg); border: none;
-      border-radius: var(--radius-sm); cursor: pointer;
-      transition: opacity 0.15s; margin-top: 0.25rem;
-    }
-    .login-btn:hover { opacity: 0.85; }
-    .login-err {
-      background: var(--danger-bg); border: 1px solid var(--danger-border);
-      border-radius: var(--radius-sm); padding: 9px 13px;
-      font-size: 13px; color: var(--danger); margin-top: 0.75rem;
-      display: none; align-items: center; gap: 7px;
-    }
+    .field label { display: block; font-size: 13px; font-weight: 600; color: var(--muted); margin-bottom: 5px; }
+    .field input { width: 100%; padding: 11px 13px; font-size: 15px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-family: inherit; transition: border-color 0.15s; }
+    .field input:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px rgba(8,100,175,0.12); }
+    .login-btn { width: 100%; padding: 12px; font-size: 15px; font-weight: 700; background: var(--blue); color: #fff; border: none; border-radius: var(--radius-sm); cursor: pointer; transition: background 0.15s; }
+    .login-btn:hover { background: var(--blue-dark); }
+    .login-err { display: none; margin-top: 10px; font-size: 13px; color: var(--danger); background: #fff5f5; border: 1px solid #f5c0bc; border-radius: var(--radius-sm); padding: 9px 13px; }
 
     /* ── Dashboard ── */
     .dashboard { display: none; }
     .topbar {
-      background: rgba(8, 30, 70, 0.88); border-bottom: 1px solid rgba(246,180,24,0.4);
-      padding: 0 2rem; height: 58px;
+      background: #05285f; color: #fff;
+      padding: 0 1.5rem; height: 60px;
       display: flex; align-items: center; justify-content: space-between;
-      position: sticky; top: 0; z-index: 10;
-      backdrop-filter: blur(10px);
+      position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.2);
     }
-    .topbar-left { display: flex; align-items: center; gap: 10px; }
-    .topbar-left h1 { font-size: 17px; font-weight: 700; color: #fff; }
-    .topbar-left span { font-size: 12px; color: rgba(255,255,255,0.7); background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2); border-radius: 50px; padding: 3px 10px; }
-    .topbar-right { display: flex; gap: 8px; align-items: center; }
+    .topbar-left { display: flex; align-items: center; gap: 12px; }
+    .topbar-left .logo { font-size: 22px; color: var(--yellow); }
+    .topbar-left h1 { font-size: 16px; font-weight: 800; }
+    .topbar-left span { font-size: 12px; color: rgba(255,255,255,0.6); background: rgba(255,255,255,0.1); border-radius: 50px; padding: 3px 10px; }
+    .topbar-right { display: flex; gap: 8px; }
 
-    .btn {
-      padding: 8px 14px; font-size: 13px; font-weight: 500;
-      border: 1px solid var(--border); border-radius: var(--radius-sm);
-      background: var(--surface); color: var(--text); cursor: pointer;
-      display: inline-flex; align-items: center; gap: 6px;
-      transition: background 0.12s, border-color 0.12s; white-space: nowrap;
-    }
-    .btn:hover { background: var(--bg); border-color: #ccc; }
-    .btn.primary { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
-    .btn.primary:hover { opacity: 0.85; }
-    .btn.danger { color: var(--danger); border-color: var(--danger-border); }
-    .btn.danger:hover { background: var(--danger-bg); }
+    .btn { padding: 8px 14px; font-size: 13px; font-weight: 600; border: none; border-radius: var(--radius-sm); cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.15s; white-space: nowrap; }
+    .btn-primary { background: var(--yellow); color: #000; }
+    .btn-primary:hover { opacity: 0.88; }
+    .btn-ghost { background: rgba(255,255,255,0.12); color: #fff; }
+    .btn-ghost:hover { background: rgba(255,255,255,0.2); }
+    .btn-outline { background: var(--surface); color: var(--text); border: 1.5px solid var(--border); }
+    .btn-outline:hover { background: var(--bg); }
+    .btn-danger { background: var(--danger); color: #fff; }
+    .btn-danger:hover { opacity: 0.88; }
+    .btn-green { background: var(--green); color: #fff; }
+    .btn-green:hover { opacity: 0.88; }
 
-    .main { padding: 2rem; position: relative; z-index: 1; }
+    .main { padding: 1.75rem; }
 
-    /* ── Stats row ── */
-    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.75rem; }
-    .stat-card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 1.25rem 1.5rem;
-      border-left: 4px solid var(--accent);
-    }
-    .stat-card .label { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--hint); margin-bottom: 6px; }
-    .stat-card .value { font-size: 32px; font-weight: 700; letter-spacing: -1px; }
-    .stat-card .sub { font-size: 12px; color: var(--muted); margin-top: 4px; }
+    /* stats */
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+    @media(max-width:900px){ .stats { grid-template-columns: repeat(2,1fr); } }
+    .stat { background: var(--surface); border-radius: var(--radius); padding: 1.25rem 1.5rem; border-left: 4px solid var(--blue); box-shadow: 0 1px 6px rgba(0,0,0,0.06); }
+    .stat.green { border-color: var(--green); }
+    .stat.yellow { border-color: var(--yellow); }
+    .stat.red { border-color: var(--danger); }
+    .stat-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--hint); margin-bottom: 6px; }
+    .stat-value { font-size: 36px; font-weight: 900; letter-spacing: -1px; color: var(--text); }
+    .stat-sub { font-size: 12px; color: var(--hint); margin-top: 4px; }
 
-    /* ── Controls ── */
-    .controls {
-      display: flex; align-items: center; gap: 10px;
-      margin-bottom: 1rem; flex-wrap: wrap;
-    }
+    /* charts */
+    .charts { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+    @media(max-width:768px){ .charts { grid-template-columns: 1fr; } }
+    .chart-card { background: var(--surface); border-radius: var(--radius); padding: 1.25rem; box-shadow: 0 1px 6px rgba(0,0,0,0.06); }
+    .chart-title { font-size: 13px; font-weight: 700; color: var(--muted); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.06em; }
+    .chart-wrap { position: relative; height: 200px; }
+
+    /* filters */
+    .filters { background: var(--surface); border-radius: var(--radius); padding: 1rem 1.25rem; margin-bottom: 1rem; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; box-shadow: 0 1px 6px rgba(0,0,0,0.06); }
     .search-wrap { position: relative; flex: 1; min-width: 200px; }
     .search-wrap i { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--hint); font-size: 13px; pointer-events: none; }
-    .search-wrap input {
-      width: 100%; padding: 9px 13px 9px 33px; font-size: 14px;
-      border: 1px solid var(--border); border-radius: var(--radius-sm);
-      background: var(--surface); color: var(--text); font-family: inherit;
-    }
-    .search-wrap input:focus { outline: none; border-color: #999; }
+    .search-wrap input { width: 100%; padding: 9px 13px 9px 33px; font-size: 14px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-family: inherit; }
+    .search-wrap input:focus { outline: none; border-color: var(--blue); }
+    .filter-select { padding: 9px 13px; font-size: 14px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-family: inherit; background: #fff; cursor: pointer; }
+    .filter-select:focus { outline: none; border-color: var(--blue); }
 
-    /* ── Table ── */
-    .table-outer { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: 0 1px 6px rgba(0,0,0,0.04); }
+    /* table */
+    .table-card { background: var(--surface); border-radius: var(--radius); overflow: hidden; box-shadow: 0 1px 6px rgba(0,0,0,0.06); }
+    .table-header { padding: 1rem 1.25rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 10px; }
+    .table-title { font-size: 15px; font-weight: 700; }
+    .table-actions { display: flex; gap: 8px; flex-wrap: wrap; }
     .table-wrap { overflow-x: auto; }
     table { width: 100%; border-collapse: collapse; font-size: 13px; }
-    thead th {
-      padding: 10px 14px; text-align: left; font-size: 11px; font-weight: 600;
-      letter-spacing: 0.06em; text-transform: uppercase; color: var(--hint);
-      background: var(--bg); border-bottom: 1px solid var(--border); white-space: nowrap;
-    }
-    tbody td {
-      padding: 11px 14px; border-bottom: 1px solid var(--border); color: var(--text);
-      max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-    }
+    thead th { padding: 10px 14px; text-align: left; font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--hint); background: var(--bg); border-bottom: 1px solid var(--border); white-space: nowrap; }
+    tbody td { padding: 11px 14px; border-bottom: 1px solid var(--border); color: var(--text); max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     tbody tr:last-child td { border-bottom: none; }
-    tbody tr:hover td { background: #f0f7ff; }
-    .action-btn {
-      padding: 4px 9px; font-size: 12px; border: 1px solid var(--danger-border);
-      border-radius: 5px; color: var(--danger); background: transparent;
-      cursor: pointer; transition: background 0.12s;
-    }
-    .action-btn:hover { background: var(--danger-bg); }
+    tbody tr:hover td { background: #f8fafc; }
+    .table-footer { padding: 10px 14px; font-size: 12px; color: var(--hint); background: var(--bg); border-top: 1px solid var(--border); display: flex; justify-content: space-between; }
+    .empty-state { text-align: center; padding: 3rem; color: var(--hint); font-size: 14px; }
+    .empty-state i { font-size: 28px; display: block; margin-bottom: 10px; }
 
-    .empty {
-      text-align: center; padding: 3rem; color: var(--hint); font-size: 14px;
-    }
-    .empty i { font-size: 28px; display: block; margin-bottom: 10px; }
+    /* status badge */
+    .status-badge { display: inline-block; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 50px; }
+    .status-Confirmed { color: var(--confirmed); background: var(--confirmed-bg); }
+    .status-Pending { color: var(--pending); background: var(--pending-bg); }
+    .status-Cancelled { color: var(--cancelled); background: var(--cancelled-bg); }
 
-    .table-footer {
-      padding: 10px 14px; border-top: 1px solid var(--border);
-      font-size: 12px; color: var(--hint); background: var(--bg);
-      display: flex; align-items: center; justify-content: space-between;
-    }
+    /* action buttons */
+    .action-wrap { display: flex; gap: 5px; }
+    .action-btn { padding: 4px 9px; font-size: 11px; border-radius: 5px; border: 1px solid var(--border); background: var(--bg); color: var(--text); cursor: pointer; transition: background 0.12s; }
+    .action-btn:hover { background: #e4eaf0; }
+    .action-btn.del { border-color: #f5c0bc; color: var(--danger); }
+    .action-btn.del:hover { background: #fff5f5; }
 
-    .toast {
-      position: fixed; bottom: 1.5rem; right: 1.5rem;
-      background: var(--text); color: var(--accent-fg);
-      padding: 10px 18px; border-radius: var(--radius-sm);
-      font-size: 14px; font-weight: 500; opacity: 0;
-      transition: opacity 0.2s; pointer-events: none; z-index: 100;
-    }
+    /* status select in table */
+    .status-select { font-size: 12px; padding: 4px 8px; border: 1px solid var(--border); border-radius: 5px; cursor: pointer; background: var(--bg); }
+
+    /* toast */
+    .toast { position: fixed; bottom: 1.5rem; right: 1.5rem; background: #1a1a1a; color: #fff; padding: 10px 18px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 500; opacity: 0; transition: opacity 0.2s; pointer-events: none; z-index: 999; }
     .toast.show { opacity: 1; }
-    @media(max-width:600px){ .stats{grid-template-columns:1fr 1fr} }
-    @media(max-width:400px){ .stats{grid-template-columns:1fr} }
+
+    /* print styles */
+    @media print {
+      .topbar, .filters, .charts, .stats, .table-actions, .action-wrap, .table-footer, .login-screen { display: none !important; }
+      .dashboard { display: block !important; }
+      .table-card { box-shadow: none; border: 1px solid #ccc; }
+      body { background: #fff; }
+    }
   </style>
 </head>
 <body>
 
-<!-- ── Login ── -->
-<div class="login-wrap" id="login-wrap">
+<!-- ── LOGIN ── -->
+<div class="login-screen" id="login-screen">
   <div class="login-card">
-    <div class="login-icon"><i class="fa-solid fa-shield-halved"></i></div>
-    <h1>Admin Panel</h1>
-    <p>Enter your password to access the registration dashboard</p>
+    <div class="login-logo"><img src="logo.png" alt="TANFISH" style="height:72px;width:auto;"/></div>
+    <h1>Admin Dashboard</h1>
+    <p class="sub">TANFISH Forum 2026 — Registration Management</p>
     <div class="field">
-      <label>Password</label>
-      <input type="password" id="pw-input" placeholder="Enter admin password" onkeydown="if(event.key==='Enter')login()"/>
+      <label>Admin Password</label>
+      <input type="password" id="pw" placeholder="Enter password" onkeydown="if(event.key==='Enter')login()"/>
     </div>
     <button class="login-btn" onclick="login()"><i class="fa-solid fa-right-to-bracket"></i> Sign in</button>
-    <div class="login-err" id="login-err"><i class="fa-solid fa-circle-exclamation"></i><span id="login-err-text"></span></div>
+    <div class="login-err" id="login-err"></div>
   </div>
 </div>
 
-<!-- ── Dashboard ── -->
+<!-- ── DASHBOARD ── -->
 <div class="dashboard" id="dashboard">
   <div class="topbar">
     <div class="topbar-left">
-      <h1><i class="fa-solid fa-table-list"></i> Registrations</h1>
-      <span id="live-count">0 members</span>
+      <img src="logo.png" alt="TANFISH" style="height:36px;width:auto;filter:brightness(0) invert(1);"/>
+      <h1>TANFISH Admin</h1>
+      <span id="live-badge">0 registered</span>
     </div>
     <div class="topbar-right">
-      <button class="btn primary" onclick="exportExcel()"><i class="fa-solid fa-file-excel"></i> Export Excel</button>
-      <button class="btn" onclick="loadData()"><i class="fa-solid fa-rotate-right"></i> Refresh</button>
-      <button class="btn" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+      <button class="btn btn-primary" onclick="exportExcel()"><i class="fa-solid fa-file-excel"></i> Export Excel</button>
+      <button class="btn btn-ghost" onclick="printList()"><i class="fa-solid fa-print"></i> Print</button>
+      <button class="btn btn-ghost" onclick="loadAll()"><i class="fa-solid fa-rotate-right"></i></button>
+      <button class="btn btn-ghost" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i></button>
     </div>
   </div>
 
   <div class="main">
+
+    <!-- Stats -->
     <div class="stats">
-      <div class="stat-card">
-        <div class="label">Total registered</div>
-        <div class="value" id="stat-total">0</div>
-        <div class="sub">all time</div>
+      <div class="stat"><div class="stat-label">Total Registered</div><div class="stat-value" id="s-total">0</div><div class="stat-sub">all time</div></div>
+      <div class="stat green"><div class="stat-label">Confirmed</div><div class="stat-value" id="s-confirmed">0</div><div class="stat-sub">registrations</div></div>
+      <div class="stat yellow"><div class="stat-label">Pending</div><div class="stat-value" id="s-pending">0</div><div class="stat-sub">registrations</div></div>
+      <div class="stat red"><div class="stat-label">Today</div><div class="stat-value" id="s-today">0</div><div class="stat-sub">new registrations</div></div>
+    </div>
+
+    <!-- Charts -->
+    <div class="charts">
+      <div class="chart-card">
+        <div class="chart-title"><i class="fa-solid fa-chart-line"></i> &nbsp;Registrations per Day</div>
+        <div class="chart-wrap"><canvas id="chart-day"></canvas></div>
       </div>
-      <div class="stat-card">
-        <div class="label">Today</div>
-        <div class="value" id="stat-today">0</div>
-        <div class="sub">registrations</div>
-      </div>
-      <div class="stat-card">
-        <div class="label">With organization</div>
-        <div class="value" id="stat-org">0</div>
-        <div class="sub">out of total</div>
+      <div class="chart-card">
+        <div class="chart-title"><i class="fa-solid fa-globe"></i> &nbsp;Top Countries</div>
+        <div class="chart-wrap"><canvas id="chart-country"></canvas></div>
       </div>
     </div>
 
-    <div class="controls">
+    <!-- Filters -->
+    <div class="filters">
       <div class="search-wrap">
         <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" id="search-input" placeholder="Search by name, email, organization…" oninput="filterTable()"/>
+        <input type="text" id="f-search" placeholder="Search name, email, org, ID…" oninput="applyFilters()"/>
       </div>
-      <button class="btn danger" onclick="confirmClearAll()"><i class="fa-solid fa-trash"></i> Clear all</button>
+      <select class="filter-select" id="f-country" onchange="applyFilters()">
+        <option value="">All countries</option>
+      </select>
+      <select class="filter-select" id="f-status" onchange="applyFilters()">
+        <option value="">All statuses</option>
+        <option>Confirmed</option>
+        <option>Pending</option>
+        <option>Cancelled</option>
+      </select>
+      <button class="btn btn-outline" onclick="clearFilters()"><i class="fa-solid fa-xmark"></i> Clear</button>
     </div>
 
-    <div class="table-outer">
+    <!-- Table -->
+    <div class="table-card" id="print-area">
+      <div class="table-header">
+        <span class="table-title">Registrations &nbsp;<span id="count-badge" style="font-size:12px;color:var(--hint);font-weight:500"></span></span>
+        <div class="table-actions">
+          <button class="btn btn-danger" onclick="confirmClear()"><i class="fa-solid fa-trash"></i> Clear all</button>
+        </div>
+      </div>
       <div class="table-wrap">
-        <table>
+        <table id="reg-table">
           <thead>
             <tr>
-              <th>#</th>
-              <th>Full name</th>
-              <th>Email</th>
-              <th>Phone</th>
-              <th>Organization</th>
-              <th>Job title</th>
-              <th>Department</th>
-              <th>Country</th>
-              <th>Diet</th>
-              <th>Source</th>
-              <th>Comments</th>
-              <th>Registered at</th>
-              <th>Action</th>
+              <th>#</th><th>ID</th><th>Status</th><th>Full name</th><th>Email</th>
+              <th>Phone</th><th>Organization</th><th>Job title</th>
+              <th>Department</th><th>Country</th><th>Diet</th><th>Source</th>
+              <th>Comments</th><th>Registered at</th><th>Actions</th>
             </tr>
           </thead>
-          <tbody id="table-body"></tbody>
+          <tbody id="reg-body"></tbody>
         </table>
       </div>
       <div class="table-footer">
-        <span id="table-footer-text">Loading…</span>
-        <span id="search-count"></span>
+        <span id="footer-text">Loading…</span>
+        <span id="filter-count"></span>
       </div>
     </div>
   </div>
@@ -258,151 +243,191 @@
   const API = '';
   let token = sessionStorage.getItem('admin_token') || '';
   let allData = [];
+  let dayChart, countryChart;
 
-  // ── Auto-login if token stored ──
   if (token) initDashboard();
 
   async function login() {
-    const pw = document.getElementById('pw-input').value;
+    const pw = document.getElementById('pw').value;
     if (!pw) return;
     try {
-      const res = await fetch(API + '/api/admin/login', {
-        method: 'POST', headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({ password: pw })
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        const err = document.getElementById('login-err');
-        document.getElementById('login-err-text').textContent = data.error || 'Login failed.';
-        err.style.display = 'flex'; return;
-      }
-      token = data.token;
-      sessionStorage.setItem('admin_token', token);
-      document.getElementById('login-err').style.display = 'none';
+      const res = await fetch(API + '/api/admin/login', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({password:pw}) });
+      const d = await res.json();
+      if (!res.ok) { const el = document.getElementById('login-err'); el.textContent = d.error; el.style.display='block'; return; }
+      token = d.token; sessionStorage.setItem('admin_token', token);
       initDashboard();
-    } catch(e) {
-      const err = document.getElementById('login-err');
-      document.getElementById('login-err-text').textContent = 'Cannot connect to server.';
-      err.style.display = 'flex';
-    }
+    } catch(e) { const el = document.getElementById('login-err'); el.textContent='Cannot connect to server.'; el.style.display='block'; }
   }
 
   function initDashboard() {
-    document.getElementById('login-wrap').style.display = 'none';
+    document.getElementById('login-screen').style.display = 'none';
     document.getElementById('dashboard').style.display = 'block';
-    loadData();
+    loadAll();
   }
+  function logout() { sessionStorage.removeItem('admin_token'); token=''; location.reload(); }
 
-  function logout() {
-    sessionStorage.removeItem('admin_token');
-    token = '';
-    document.getElementById('login-wrap').style.display = 'flex';
-    document.getElementById('dashboard').style.display = 'none';
-    document.getElementById('pw-input').value = '';
+  async function loadAll() {
+    await Promise.all([loadData(), loadStats()]);
   }
 
   async function loadData() {
     try {
-      const res = await fetch(API + '/api/admin/registrations', {
-        headers: { 'x-admin-token': token }
-      });
-      if (res.status === 401) { logout(); return; }
-      const data = await res.json();
-      allData = data.data || [];
-      renderStats();
-      renderTable(allData);
-      document.getElementById('live-count').textContent = allData.length + ' member' + (allData.length === 1 ? '' : 's');
-    } catch(e) {
-      showToast('Failed to load data. Is the server running?');
-    }
+      const res = await fetch(API + '/api/admin/registrations', { headers:{'x-admin-token':token} });
+      if (res.status===401) { logout(); return; }
+      const d = await res.json();
+      allData = d.data || [];
+      populateCountryFilter();
+      applyFilters();
+      document.getElementById('live-badge').textContent = allData.length + ' registered';
+    } catch(e) { toast('Failed to load data.'); }
   }
 
-  function renderStats() {
-    const today = new Date().toLocaleDateString();
-    const todayCount = allData.filter(r => new Date(r.createdAt).toLocaleDateString() === today).length;
-    const withOrg = allData.filter(r => r.organization).length;
-    document.getElementById('stat-total').textContent = allData.length;
-    document.getElementById('stat-today').textContent = todayCount;
-    document.getElementById('stat-org').textContent = withOrg;
+  async function loadStats() {
+    try {
+      const res = await fetch(API + '/api/admin/stats', { headers:{'x-admin-token':token} });
+      const d = await res.json();
+      document.getElementById('s-total').textContent = d.total;
+      document.getElementById('s-confirmed').textContent = d.byStatus?.Confirmed || 0;
+      document.getElementById('s-pending').textContent = d.byStatus?.Pending || 0;
+      const today = new Date().toISOString().slice(0,10);
+      document.getElementById('s-today').textContent = d.byDay?.[today] || 0;
+      renderCharts(d);
+    } catch(e) {}
+  }
+
+  function renderCharts(d) {
+    // Day chart
+    const days = Object.keys(d.byDay||{}).sort().slice(-14);
+    const dayVals = days.map(k => d.byDay[k]);
+    if (dayChart) dayChart.destroy();
+    dayChart = new Chart(document.getElementById('chart-day'), {
+      type: 'line',
+      data: { labels: days.map(d => d.slice(5)), datasets: [{ label:'Registrations', data: dayVals, borderColor:'#0864AF', backgroundColor:'rgba(8,100,175,0.08)', tension:0.4, fill:true, pointBackgroundColor:'#0864AF' }] },
+      options: { responsive:true, maintainAspectRatio:false, plugins:{ legend:{ display:false } }, scales:{ y:{ beginAtZero:true, ticks:{ stepSize:1 } } } }
+    });
+
+    // Country chart
+    const countries = Object.entries(d.byCountry||{}).sort((a,b)=>b[1]-a[1]).slice(0,8);
+    if (countryChart) countryChart.destroy();
+    countryChart = new Chart(document.getElementById('chart-country'), {
+      type: 'doughnut',
+      data: { labels: countries.map(c=>c[0]||'Unknown'), datasets: [{ data: countries.map(c=>c[1]), backgroundColor:['#0864AF','#F6B418','#38574D','#5BA4E6','#F6D478','#6B9E8F','#8FBFDE','#C8A835'] }] },
+      options: { responsive:true, maintainAspectRatio:false, plugins:{ legend:{ position:'right', labels:{ font:{ size:11 } } } } }
+    });
+  }
+
+  function populateCountryFilter() {
+    const countries = [...new Set(allData.map(r => r.country).filter(Boolean))].sort();
+    const sel = document.getElementById('f-country');
+    const cur = sel.value;
+    sel.innerHTML = '<option value="">All countries</option>' + countries.map(c => `<option ${c===cur?'selected':''}>${c}</option>`).join('');
+  }
+
+  function applyFilters() {
+    const q = document.getElementById('f-search').value.toLowerCase();
+    const country = document.getElementById('f-country').value;
+    const status = document.getElementById('f-status').value;
+    let filtered = allData;
+    if (q) filtered = filtered.filter(r => [r.name,r.email,r.phone,r.organization,r.registrationId].some(v=>(v||'').toLowerCase().includes(q)));
+    if (country) filtered = filtered.filter(r => r.country === country);
+    if (status) filtered = filtered.filter(r => r.status === status);
+    renderTable(filtered);
+    document.getElementById('filter-count').textContent = filtered.length !== allData.length ? `${filtered.length} of ${allData.length} shown` : '';
+  }
+
+  function clearFilters() {
+    document.getElementById('f-search').value = '';
+    document.getElementById('f-country').value = '';
+    document.getElementById('f-status').value = '';
+    applyFilters();
   }
 
   function renderTable(data) {
-    const body = document.getElementById('table-body');
-    const footer = document.getElementById('table-footer-text');
+    const body = document.getElementById('reg-body');
+    document.getElementById('count-badge').textContent = `(${data.length} record${data.length===1?'':'s'})`;
+    document.getElementById('footer-text').textContent = `${data.length} record${data.length===1?'':'s'}`;
     if (!data.length) {
-      body.innerHTML = `<tr><td colspan="13" class="empty"><i class="fa-regular fa-folder-open"></i>No registrations found.</td></tr>`;
-      footer.textContent = '0 records';
+      body.innerHTML = `<tr><td colspan="15" class="empty-state"><i class="fa-regular fa-folder-open"></i>No registrations found.</td></tr>`;
       return;
     }
-    body.innerHTML = data.map((r, i) => `
-      <tr>
-        <td>${i + 1}</td>
-        <td title="${esc(r.name)}">${esc(r.name)}</td>
-        <td title="${esc(r.email)}">${esc(r.email)}</td>
-        <td>${esc(r.phone)}</td>
-        <td title="${esc(r.organization)}">${esc(r.organization) || '—'}</td>
-        <td title="${esc(r.jobTitle)}">${esc(r.jobTitle) || '—'}</td>
-        <td title="${esc(r.department)}">${esc(r.department) || '—'}</td>
-        <td>${esc(r.country) || '—'}</td>
-        <td>${esc(r.diet) || 'None'}</td>
-        <td>${esc(r.source) || '—'}</td>
-        <td title="${esc(r.comments)}">${esc(r.comments) || '—'}</td>
-        <td style="white-space:nowrap">${esc(r.registeredAt)}</td>
-        <td><button class="action-btn" onclick="deleteRecord('${r._id}')"><i class="fa-solid fa-trash"></i></button></td>
-      </tr>
-    `).join('');
-    footer.textContent = `${data.length} record${data.length === 1 ? '' : 's'}`;
+    body.innerHTML = data.map((r,i) => `
+      <tr id="row-${r._id}">
+        <td>${i+1}</td>
+        <td><strong>${e(r.registrationId||'—')}</strong></td>
+        <td>
+          <select class="status-select" onchange="updateStatus('${r._id}',this.value)">
+            <option ${r.status==='Confirmed'?'selected':''}>Confirmed</option>
+            <option ${r.status==='Pending'?'selected':''}>Pending</option>
+            <option ${r.status==='Cancelled'?'selected':''}>Cancelled</option>
+          </select>
+        </td>
+        <td title="${e(r.name)}">${e(r.name)}</td>
+        <td title="${e(r.email)}">${e(r.email)}</td>
+        <td>${e(r.phone)}</td>
+        <td title="${e(r.organization)}">${e(r.organization)||'—'}</td>
+        <td title="${e(r.jobTitle)}">${e(r.jobTitle)||'—'}</td>
+        <td title="${e(r.department)}">${e(r.department)||'—'}</td>
+        <td>${e(r.country)||'—'}</td>
+        <td>${e(r.diet)||'None'}</td>
+        <td>${e(r.source)||'—'}</td>
+        <td title="${e(r.comments)}">${e(r.comments)||'—'}</td>
+        <td style="white-space:nowrap">${e(r.registeredAt)}</td>
+        <td>
+          <div class="action-wrap">
+            <button class="action-btn del" onclick="deleteRecord('${r._id}')"><i class="fa-solid fa-trash"></i></button>
+          </div>
+        </td>
+      </tr>`).join('');
   }
 
-  function filterTable() {
-    const q = document.getElementById('search-input').value.toLowerCase();
-    if (!q) { renderTable(allData); document.getElementById('search-count').textContent=''; return; }
-    const filtered = allData.filter(r =>
-      [r.name, r.email, r.phone, r.organization, r.jobTitle, r.department, r.country, r.comments]
-        .some(v => (v||'').toLowerCase().includes(q))
-    );
-    renderTable(filtered);
-    document.getElementById('search-count').textContent = `${filtered.length} match${filtered.length===1?'':'es'}`;
+  async function updateStatus(id, status) {
+    try {
+      const res = await fetch(API + '/api/admin/registrations/' + id, {
+        method:'PATCH', headers:{'Content-Type':'application/json','x-admin-token':token},
+        body: JSON.stringify({status})
+      });
+      if (!res.ok) throw new Error();
+      const rec = allData.find(r => r._id === id);
+      if (rec) rec.status = status;
+      toast('Status updated to ' + status);
+      loadStats();
+    } catch(e) { toast('Failed to update status.'); }
   }
 
   async function deleteRecord(id) {
     if (!confirm('Delete this registration? This cannot be undone.')) return;
     try {
-      const res = await fetch(API + '/api/admin/registrations/' + id, {
-        method: 'DELETE', headers: {'x-admin-token': token}
-      });
+      const res = await fetch(API + '/api/admin/registrations/' + id, { method:'DELETE', headers:{'x-admin-token':token} });
       if (!res.ok) throw new Error();
       allData = allData.filter(r => r._id !== id);
-      renderStats(); filterTable();
-      document.getElementById('live-count').textContent = allData.length + ' member' + (allData.length === 1 ? '' : 's');
-      showToast('Registration deleted.');
-    } catch(e) { showToast('Failed to delete.'); }
+      applyFilters(); populateCountryFilter();
+      document.getElementById('live-badge').textContent = allData.length + ' registered';
+      toast('Registration deleted.');
+      loadStats();
+    } catch(e) { toast('Failed to delete.'); }
   }
 
-  async function confirmClearAll() {
-    if (!allData.length) { showToast('No records to clear.'); return; }
+  async function confirmClear() {
+    if (!allData.length) { toast('No records to clear.'); return; }
     if (!confirm(`Delete ALL ${allData.length} registrations? This cannot be undone.`)) return;
-    // Delete one by one
-    for (const r of [...allData]) await deleteRecord(r._id);
+    for (const r of [...allData]) {
+      await fetch(API + '/api/admin/registrations/' + r._id, { method:'DELETE', headers:{'x-admin-token':token} });
+    }
+    allData = []; applyFilters(); loadStats();
+    document.getElementById('live-badge').textContent = '0 registered';
+    toast('All registrations cleared.');
   }
 
   function exportExcel() {
-    const link = document.createElement('a');
-    link.href = API + '/api/admin/export';
-    // Pass token via URL for file download (simple approach)
-    link.href = API + '/api/admin/export?t=' + encodeURIComponent(token);
-    link.click();
+    const a = document.createElement('a');
+    a.href = API + '/api/admin/export?t=' + encodeURIComponent(token);
+    a.click();
   }
 
-  function esc(s) {
-    return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  }
+  function printList() { window.print(); }
 
-  function showToast(msg) {
-    const t = document.getElementById('toast');
-    t.textContent = msg; t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 3000);
-  }
+  function e(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function toast(msg) { const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3000); }
 </script>
 </body>
 </html>

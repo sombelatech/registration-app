@@ -1,19 +1,15 @@
 {
-  "name": "registration-app",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "start": "node server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "name": "tanfish-registration",
+  "version": "3.0.0",
+  "description": "TANFISH Forum 2026 Registration System",
+  "main": "server.js",
+  "scripts": { "start": "node server.js" },
   "dependencies": {
     "cors": "^2.8.6",
     "express": "^5.2.1",
     "nedb-promises": "^6.2.3",
+    "nodemailer": "^6.9.13",
+    "qrcode": "^1.5.3",
     "xlsx": "^0.18.5"
   }
 }
