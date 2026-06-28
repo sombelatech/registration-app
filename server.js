@@ -15,11 +15,11 @@ const PORT = process.env.PORT || 3000;
 // ═══════════════════════════════════════════════════════════
 const CONFIG = {
   eventName:    'Tanzania Digital Fisheries Trade & Market Linkages Forum 2026',
- eventDate:    '2026-07-22',
-eventDateDisplay: 'July 22–23, 2026',
-eventLocation: 'Dar es Salaam, Tanzania',
-eventWebsite: 'https://tanfishmarket.com/',
-registrationDeadline: '2026-07-20',
+  eventDate:    '2026-07-22',
+  eventDateDisplay: 'July 22–23, 2026',
+  eventLocation: 'Dar es Salaam, Tanzania',
+  eventWebsite: 'https://tanfishmarket.com/',
+  registrationDeadline: '2026-07-21',
   adminPassword: 'admin1234',          // ← change this!
   adminEmail:   'YOUR_EMAIL@gmail.com', // ← your personal email to receive notifications
   // ── Gmail sender (fill after creating Gmail account) ──
