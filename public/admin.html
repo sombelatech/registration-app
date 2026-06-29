@@ -7,6 +7,11 @@
   <link rel="icon" href="logo.png" type="image/png"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="firebase-config.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -144,8 +149,12 @@
     <h1>Admin Dashboard</h1>
     <p class="sub">TANFISH Forum 2026 — Registration Management</p>
     <div class="field">
-      <label>Admin Password</label>
-      <input type="password" id="pw" placeholder="Enter password" onkeydown="if(event.key==='Enter')login()"/>
+      <label>Admin Email</label>
+      <input type="email" id="admin-email" placeholder="admin@example.com" autocomplete="username" onkeydown="if(event.key==='Enter')login()"/>
+    </div>
+    <div class="field">
+      <label>Password</label>
+      <input type="password" id="pw" placeholder="Enter password" autocomplete="current-password" onkeydown="if(event.key==='Enter')login()"/>
     </div>
     <button class="login-btn" onclick="login()"><i class="fa-solid fa-right-to-bracket"></i> Sign in</button>
     <div class="login-err" id="login-err"></div>
@@ -240,23 +249,35 @@
 <div class="toast" id="toast"></div>
 
 <script>
-  const API = '';
-  let token = sessionStorage.getItem('admin_token') || '';
+  firebase.initializeApp(window.FIREBASE_CONFIG);
+  const db = firebase.firestore();
+  const auth = firebase.auth();
   let allData = [];
   let dayChart, countryChart;
 
-  if (token) initDashboard();
+  // Show dashboard when signed in, login screen when not
+  auth.onAuthStateChanged(user => {
+    if (user) initDashboard();
+    else {
+      document.getElementById('login-screen').style.display = 'flex';
+      document.getElementById('dashboard').style.display = 'none';
+    }
+  });
 
   async function login() {
+    const email = document.getElementById('admin-email').value.trim();
     const pw = document.getElementById('pw').value;
-    if (!pw) return;
+    const el = document.getElementById('login-err');
+    el.style.display = 'none';
+    if (!email || !pw) return;
     try {
-      const res = await fetch(API + '/api/admin/login', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({password:pw}) });
-      const d = await res.json();
-      if (!res.ok) { const el = document.getElementById('login-err'); el.textContent = d.error; el.style.display='block'; return; }
-      token = d.token; sessionStorage.setItem('admin_token', token);
-      initDashboard();
-    } catch(e) { const el = document.getElementById('login-err'); el.textContent='Cannot connect to server.'; el.style.display='block'; }
+      await auth.signInWithEmailAndPassword(email, pw);
+      // onAuthStateChanged() takes over from here
+    } catch(e) {
+      const bad = ['auth/invalid-credential','auth/wrong-password','auth/user-not-found','auth/invalid-email'].includes(e.code);
+      el.textContent = bad ? 'Incorrect email or password.' : (e.message || 'Sign in failed.');
+      el.style.display = 'block';
+    }
   }
 
   function initDashboard() {
@@ -264,35 +285,34 @@
     document.getElementById('dashboard').style.display = 'block';
     loadAll();
   }
-  function logout() { sessionStorage.removeItem('admin_token'); token=''; location.reload(); }
+  function logout() { auth.signOut(); }
 
   async function loadAll() {
-    await Promise.all([loadData(), loadStats()]);
-  }
-
-  async function loadData() {
     try {
-      const res = await fetch(API + '/api/admin/registrations', { headers:{'x-admin-token':token} });
-      if (res.status===401) { logout(); return; }
-      const d = await res.json();
-      allData = d.data || [];
+      const snap = await db.collection('registrations').orderBy('createdAt', 'asc').get();
+      allData = snap.docs.map(d => ({ _id: d.id, ...d.data() }));
       populateCountryFilter();
       applyFilters();
+      computeStats();
       document.getElementById('live-badge').textContent = allData.length + ' registered';
-    } catch(e) { toast('Failed to load data.'); }
+    } catch(e) { console.error(e); toast('Failed to load data.'); }
   }
 
-  async function loadStats() {
-    try {
-      const res = await fetch(API + '/api/admin/stats', { headers:{'x-admin-token':token} });
-      const d = await res.json();
-      document.getElementById('s-total').textContent = d.total;
-      document.getElementById('s-confirmed').textContent = d.byStatus?.Confirmed || 0;
-      document.getElementById('s-pending').textContent = d.byStatus?.Pending || 0;
-      const today = new Date().toISOString().slice(0,10);
-      document.getElementById('s-today').textContent = d.byDay?.[today] || 0;
-      renderCharts(d);
-    } catch(e) {}
+  function computeStats() {
+    const byCountry = {}, byDay = {}, byStatus = { Confirmed:0, Pending:0, Cancelled:0 };
+    allData.forEach(r => {
+      const c = r.country || 'Unknown'; byCountry[c] = (byCountry[c]||0) + 1;
+      let day = 'Unknown';
+      if (r.createdAt && r.createdAt.toDate) day = r.createdAt.toDate().toISOString().slice(0,10);
+      byDay[day] = (byDay[day]||0) + 1;
+      if (r.status) byStatus[r.status] = (byStatus[r.status]||0) + 1;
+    });
+    document.getElementById('s-total').textContent = allData.length;
+    document.getElementById('s-confirmed').textContent = byStatus.Confirmed || 0;
+    document.getElementById('s-pending').textContent = byStatus.Pending || 0;
+    const today = new Date().toISOString().slice(0,10);
+    document.getElementById('s-today').textContent = byDay[today] || 0;
+    renderCharts({ byDay, byCountry });
   }
 
   function renderCharts(d) {
@@ -384,46 +404,56 @@
 
   async function updateStatus(id, status) {
     try {
-      const res = await fetch(API + '/api/admin/registrations/' + id, {
-        method:'PATCH', headers:{'Content-Type':'application/json','x-admin-token':token},
-        body: JSON.stringify({status})
-      });
-      if (!res.ok) throw new Error();
+      await db.collection('registrations').doc(id).update({ status });
       const rec = allData.find(r => r._id === id);
       if (rec) rec.status = status;
       toast('Status updated to ' + status);
-      loadStats();
-    } catch(e) { toast('Failed to update status.'); }
+      computeStats();
+    } catch(e) { console.error(e); toast('Failed to update status.'); }
   }
 
   async function deleteRecord(id) {
     if (!confirm('Delete this registration? This cannot be undone.')) return;
     try {
-      const res = await fetch(API + '/api/admin/registrations/' + id, { method:'DELETE', headers:{'x-admin-token':token} });
-      if (!res.ok) throw new Error();
+      await db.collection('registrations').doc(id).delete();
       allData = allData.filter(r => r._id !== id);
-      applyFilters(); populateCountryFilter();
+      applyFilters(); populateCountryFilter(); computeStats();
       document.getElementById('live-badge').textContent = allData.length + ' registered';
       toast('Registration deleted.');
-      loadStats();
-    } catch(e) { toast('Failed to delete.'); }
+    } catch(e) { console.error(e); toast('Failed to delete.'); }
   }
 
   async function confirmClear() {
     if (!allData.length) { toast('No records to clear.'); return; }
     if (!confirm(`Delete ALL ${allData.length} registrations? This cannot be undone.`)) return;
-    for (const r of [...allData]) {
-      await fetch(API + '/api/admin/registrations/' + r._id, { method:'DELETE', headers:{'x-admin-token':token} });
-    }
-    allData = []; applyFilters(); loadStats();
-    document.getElementById('live-badge').textContent = '0 registered';
-    toast('All registrations cleared.');
+    try {
+      for (let i = 0; i < allData.length; i += 400) {
+        const batch = db.batch();
+        allData.slice(i, i + 400).forEach(r => batch.delete(db.collection('registrations').doc(r._id)));
+        await batch.commit();
+      }
+      allData = []; applyFilters(); populateCountryFilter(); computeStats();
+      document.getElementById('live-badge').textContent = '0 registered';
+      toast('All registrations cleared.');
+    } catch(e) { console.error(e); toast('Failed to clear.'); }
   }
 
   function exportExcel() {
-    const a = document.createElement('a');
-    a.href = API + '/api/admin/export?t=' + encodeURIComponent(token);
-    a.click();
+    if (!allData.length) { toast('No data to export.'); return; }
+    const rows = allData.map((r,i) => ({
+      '#': i+1, 'Registration ID': r.registrationId, 'Status': r.status,
+      'Full Name': r.name, 'Email': r.email, 'Phone': r.phone,
+      'Organization': r.organization||'—', 'Job Title': r.jobTitle||'—',
+      'Department': r.department||'—', 'Country': r.country||'—',
+      'Registration Type': r.participantType||'—', 'Role Details': r.participantTypeOther||'—',
+      'Payment Package': r.paymentPackage||'—', 'Payment Reference': r.paymentReference||'—',
+      'Comments': r.comments||'—', 'Registered At': r.registeredAt||''
+    }));
+    const ws = XLSX.utils.json_to_sheet(rows);
+    ws['!cols'] = [4,14,12,22,26,16,22,18,20,14,20,16,30,22].map(w => ({ wch: w }));
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Registrations');
+    XLSX.writeFile(wb, `tanfish_registrations_${new Date().toISOString().slice(0,10)}.xlsx`);
   }
 
   function printList() { window.print(); }

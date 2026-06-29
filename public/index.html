@@ -408,8 +408,17 @@
 
 </div>
 
+<!-- Firebase (compat) + EmailJS SDKs -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script src="firebase-config.js"></script>
+
 <script>
-  const API = '';
+  // ── Firebase init ──
+  firebase.initializeApp(window.FIREBASE_CONFIG);
+  const db = firebase.firestore();
+
   let currentStep = 1;
   let eventDate = null;
   let config = null;
@@ -594,9 +603,9 @@
     }
   }
 
-  async function init() {
+  function init() {
     try {
-      const cfg = await fetch(API + '/api/config').then(r => r.json());
+      const cfg = window.EVENT_CONFIG;
       config = cfg;
       document.getElementById('hero-date').textContent = cfg.eventDateDisplay || new Date(cfg.eventDate).toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' });
       document.getElementById('hero-location').textContent = cfg.eventLocation;
@@ -613,8 +622,85 @@
         document.getElementById('closed-card').style.display = 'block';
       }
     } catch(e) { console.error(e); }
+    // Init EmailJS if configured
+    const E = window.EMAILJS_CONFIG;
+    if (E && E.publicKey && !E.publicKey.startsWith('YOUR_')) {
+      try { emailjs.init({ publicKey: E.publicKey }); } catch(err) { console.error('EmailJS init failed', err); }
+    }
     applyLanguage();
     toggleOtherRole();
+  }
+
+  // Make an email safe to use as a Firestore document ID (guarantees uniqueness)
+  function emailDocId(email) {
+    return btoa(unescape(encodeURIComponent(email.toLowerCase().trim())))
+      .replace(/\//g, '_').replace(/\+/g, '-').replace(/=+$/, '');
+  }
+
+  // Write the registration to Firestore. Public visitors can't READ the
+  // registrations collection (admin-only), so we never read it here:
+  //  1. Reserve the next sequential id from the public meta/counter doc.
+  //  2. Create the registration doc (id derived from email). The rules allow
+  //     create but not public update, so a duplicate email is rejected.
+  async function saveRegistration(data) {
+    const deadline = new Date(config.registrationDeadline);
+    deadline.setHours(23, 59, 59);
+    if (new Date() > deadline) throw new Error('Registration is now closed. The deadline has passed.');
+
+    const regRef = db.collection('registrations').doc(emailDocId(data.email));
+    const counterRef = db.collection('meta').doc('counter');
+
+    // 1. Reserve a sequential id (counter is publicly readable + incrementable)
+    const registrationId = await db.runTransaction(async (tx) => {
+      const snap = await tx.get(counterRef);
+      const next = (snap.exists ? snap.data().count : 0) + 1;
+      if (snap.exists) tx.update(counterRef, { count: next });
+      else tx.set(counterRef, { count: next });
+      return 'TF2026-' + String(next).padStart(4, '0');
+    });
+
+    // 2. Create the registration (a duplicate email => "update" => denied)
+    try {
+      await regRef.set({
+        ...data,
+        registrationId,
+        status: 'Confirmed',
+        registeredAt: new Date().toLocaleString('en-TZ', { timeZone: 'Africa/Dar_es_Salaam' }),
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    } catch (err) {
+      if (err && err.code === 'permission-denied') {
+        throw new Error('This email address is already registered.');
+      }
+      throw err;
+    }
+    return registrationId;
+  }
+
+  // Send confirmation (to registrant) + alert (to admin) via EmailJS
+  async function sendEmails(record) {
+    const E = window.EMAILJS_CONFIG;
+    if (!E || !E.publicKey || E.publicKey.startsWith('YOUR_')) return; // not configured → skip
+    const params = {
+      to_email: record.email,
+      to_name: record.name,
+      registration_id: record.registrationId,
+      event_name: config.eventName,
+      event_date: config.eventDateDisplay,
+      event_location: config.eventLocation,
+      event_website: config.eventWebsite,
+      email: record.email,
+      phone: record.phone,
+      organization: record.organization || '—',
+      job_title: record.jobTitle || '—',
+      country: record.country || '—'
+    };
+    try {
+      await emailjs.send(E.serviceId, E.templateId, params);
+      if (E.adminTemplateId && !E.adminTemplateId.startsWith('YOUR_') && E.adminEmail) {
+        await emailjs.send(E.serviceId, E.adminTemplateId, { ...params, to_email: E.adminEmail, admin_email: E.adminEmail });
+      }
+    } catch (err) { console.error('Email send error', err); }
   }
 
   function startCountdown(target) {
@@ -776,20 +862,17 @@
     document.getElementById('send-icon').style.display = 'none';
     document.getElementById('btn-text').textContent = translations[currentLang].btnSubmitSpinner;
     try {
-      const res = await fetch(API + '/api/register', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: g('f-name'), email: g('f-email'), phone: g('f-phone'),
-          organization: g('f-org'), jobTitle: g('f-title'), department: g('f-dept'),
-          country: g('f-country'), participantType: g('f-role'), participantTypeOther: g('f-role-other'),
-          paymentPackage: g('f-package'), paymentReference: g('f-payment-ref'), comments: g('f-comments')
-        })
-      });
-      const data = await res.json();
-      if (!res.ok) { showError(data.error || translations[currentLang].submitFailMsg); return; }
+      const data = {
+        name: g('f-name'), email: g('f-email').toLowerCase(), phone: g('f-phone'),
+        organization: g('f-org'), jobTitle: g('f-title'), department: g('f-dept'),
+        country: g('f-country'), participantType: g('f-role'), participantTypeOther: g('f-role-other'),
+        paymentPackage: g('f-package'), paymentReference: g('f-payment-ref'), comments: g('f-comments')
+      };
+      const registrationId = await saveRegistration(data);
+      sendEmails({ ...data, registrationId }).catch(console.error); // fire-and-forget
       document.getElementById('progress-bar').style.width = '100%';
       [1,2,3].forEach(i => { document.getElementById('dot-'+i).classList.remove('active'); document.getElementById('dot-'+i).classList.add('done'); });
-      document.getElementById('reg-id-display').textContent = data.id;
+      document.getElementById('reg-id-display').textContent = registrationId;
       document.getElementById('form-card').style.display = 'none';
       document.getElementById('success-card').style.display = 'block';
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -797,7 +880,10 @@
         resetForm();
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }, 4000);
-    } catch(e) { showError(translations[currentLang].connectFailMsg); }
+    } catch(e) {
+      const known = ['already registered', 'Registration is now closed'].some(s => (e.message||'').includes(s));
+      showError(known ? e.message : (translations[currentLang].submitFailMsg));
+    }
     finally {
       btn.disabled = false;
       document.getElementById('spinner').style.display = 'none';
