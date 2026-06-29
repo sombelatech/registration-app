@@ -396,9 +396,14 @@
     <div class="reg-id-box" id="reg-id-display">TF2026-0001</div>
     <p id="success-note" style="margin-top:10px">Please save this ID for your records.<br>We look forward to seeing you at the Forum!</p>
     <br>
-    <button class="btn btn-secondary" id="register-another" onclick="resetForm()" style="margin:0 auto">
-      <i class="fa-solid fa-plus"></i> Register another person
-    </button>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+      <button class="btn btn-secondary" id="back-to-start" onclick="startOver()" style="margin:0 auto">
+        <i class="fa-solid fa-rotate-left"></i> Back to beginning
+      </button>
+      <button class="btn btn-secondary" id="register-another" onclick="resetForm()" style="margin:0 auto">
+        <i class="fa-solid fa-plus"></i> Register another person
+      </button>
+    </div>
   </div>
 
 </div>
@@ -429,6 +434,7 @@
       btnSubmit: 'Submit Registration',
       btnSubmitSpinner: 'Submitting...',
       btnRegisterAnother: 'Register another person',
+      btnBackToStart: 'Back to beginning',
       lblName: 'Full name',
       lblEmail: 'Email address',
       lblPhone: 'Phone number',
@@ -508,6 +514,7 @@
       btnSubmit: 'Wasilisha Usajili',
       btnSubmitSpinner: 'Inawasilisha...',
       btnRegisterAnother: 'Sajili mtu mwingine',
+      btnBackToStart: 'Rudi mwanzo',
       lblName: 'Jina kamili',
       lblEmail: 'Anwani ya barua pepe',
       lblPhone: 'Namba ya simu',
@@ -685,6 +692,7 @@
     document.getElementById('back-3').innerHTML = '<i class="fa-solid fa-arrow-left"></i> ' + t.btnBack;
     document.getElementById('submit-btn').innerHTML = '<span class="spinner" id="spinner"></span><i class="fa-solid fa-paper-plane" id="send-icon"></i><span id="btn-text">' + t.btnSubmit + '</span>';
     document.getElementById('btn-text').textContent = t.btnSubmit;
+    document.getElementById('back-to-start').innerHTML = '<i class="fa-solid fa-rotate-left"></i> ' + t.btnBackToStart;
     document.getElementById('register-another').innerHTML = '<i class="fa-solid fa-plus"></i> ' + t.btnRegisterAnother;
     document.getElementById('success-card-title').textContent = t.successTitle;
     document.getElementById('success-card-text').textContent = t.successText;
@@ -785,6 +793,10 @@
       document.getElementById('form-card').style.display = 'none';
       document.getElementById('success-card').style.display = 'block';
       window.scrollTo({ top: 0, behavior: 'smooth' });
+      setTimeout(() => {
+        resetForm();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 4000);
     } catch(e) { showError(translations[currentLang].connectFailMsg); }
     finally {
       btn.disabled = false;
@@ -792,6 +804,11 @@
       document.getElementById('send-icon').style.display = 'inline';
       document.getElementById('btn-text').textContent = translations[currentLang].btnSubmit;
     }
+  }
+
+  function startOver() {
+    resetForm();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   function resetForm() {
