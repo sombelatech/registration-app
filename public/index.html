@@ -98,6 +98,8 @@
 
     /* ── FORM WRAP ── */
     .page-wrap { max-width: 680px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; position: relative; z-index: 1; }
+    body.form-started .hero { display: none; }
+    body.form-started .page-wrap { padding-top: 1.5rem; }
 
     /* progress bar */
     .progress-wrap { margin-bottom: 1.75rem; animation: floatIn 0.7s ease; }
@@ -183,7 +185,7 @@
 
     /* error */
     .error-msg {
-      border: 1.5px solid #f5c0bc; border-left: 4px solid var(--danger);
+      border: 1.5px solid #f5c0bc; border-left: 4px solid var(--danger); 
       border-radius: var(--radius-sm); padding: 10px 14px;
       font-size: 13px; color: var(--danger); margin-bottom: 1rem;
       display: none; align-items: center; gap: 8px; background: #fff5f5;
@@ -236,17 +238,17 @@
       <button class="lang-toggle" id="lang-toggle" onclick="toggleLanguage()">🌐 Kiswahili</button>
     </div>
     <div class="hero-meta">
-      <div class="hero-meta-item"><i class="fa-solid fa-calendar-days"></i> <span id="hero-date">Loading...</span></div>
+      <div class="hero-meta-item"><i class="fa-solid fa-calendar-days"></i> <span id="hero-date">22 -23July 2026</span></div>
       <div class="hero-meta-item"><i class="fa-solid fa-location-dot"></i> <span id="hero-location">Loading...</span></div>
     </div>
     <div class="countdown" id="countdown">
-      <div class="cd-box"><div class="cd-num" id="cd-days">--</div><div class="cd-label">Days</div></div>
-      <div class="cd-box"><div class="cd-num" id="cd-hours">--</div><div class="cd-label">Hours</div></div>
-      <div class="cd-box"><div class="cd-num" id="cd-mins">--</div><div class="cd-label">Minutes</div></div>
-      <div class="cd-box"><div class="cd-num" id="cd-secs">--</div><div class="cd-label">Seconds</div></div>
+      <div class="cd-box"><div class="cd-num" id="cd-days">--</div><div class="cd-label" id="cd-label-days">Days</div></div>
+      <div class="cd-box"><div class="cd-num" id="cd-hours">--</div><div class="cd-label" id="cd-label-hours">Hours</div></div>
+      <div class="cd-box"><div class="cd-num" id="cd-mins">--</div><div class="cd-label" id="cd-label-mins">Minutes</div></div>
+      <div class="cd-box"><div class="cd-num" id="cd-secs">--</div><div class="cd-label" id="cd-label-secs">Seconds</div></div>
     </div>
-    <p class="hero-desc">Join 200+ fisheries, business, government, and development leaders at Tanzania's premier forum dedicated to strengthening fisheries trade, expanding market opportunities, and accelerating digital transformation across the fisheries value chain. The forum brings together fishers, traders, processors, buyers, exporters, financial institutions, technology providers, government agencies, and development partners for buyer–seller matchmaking, financing consultations, business exhibitions, networking, and the TANFISH Market showcase.</p>
-    <div class="deadline-badge"><i class="fa-solid fa-clock"></i> &nbsp;Registration closes: <span id="deadline-text">...</span></div>
+    <p class="hero-desc" id="hero-desc">Join 200+ fisheries, business, government, and development leaders at Tanzania's premier forum dedicated to strengthening fisheries trade, expanding market opportunities, and accelerating digital transformation across the fisheries value chain. The forum brings together fishers, traders, processors, buyers, exporters, financial institutions, technology providers, government agencies, and development partners for buyer–seller matchmaking, financing consultations, business exhibitions, networking, and the TANFISH Market showcase.</p>
+    <div class="deadline-badge" id="deadline-badge"><i class="fa-solid fa-clock"></i> &nbsp;<span id="deadline-label">Registration closes</span>: <span id="deadline-text">...</span></div>
   </div>
 </div>
 
@@ -279,8 +281,8 @@
   <!-- Closed card -->
   <div class="closed-card" id="closed-card">
     <i class="fa-solid fa-lock"></i>
-    <h2>Registration Closed</h2>
-    <p>The registration deadline for this event has passed.<br>Please contact the organizers for more information.</p>
+    <h2 id="closed-title">Registration Closed</h2>
+    <p id="closed-subtitle">The registration deadline for this event has passed.<br>Please contact the organizers for more information.</p>
   </div>
 
   <!-- Form card -->
@@ -339,17 +341,17 @@
           <label id="lbl-role">I am registering as <span class="req">*</span></label>
           <select id="f-role" onchange="toggleOtherRole()">
             <option value="">Select an option</option>
-            <option>Sponsor</option><option>Exhibitor</option><option>Seller</option>
-            <option>Buyer</option><option>Academic staff</option><option>Fishpond owner / farmer</option>
-            <option>Logistics partner</option><option>Government / development partner</option><option>Other</option>
+            <option value="sponsor">Sponsor</option><option value="exhibitor">Exhibitor</option><option value="seller">Seller</option>
+            <option value="buyer">Buyer</option><option value="academic_staff">Academic staff</option><option value="fishpond_owner">Fishpond owner / farmer</option>
+            <option value="logistics_partner">Logistics partner</option><option value="government_partner">Government / development partner</option><option value="other">Other</option>
           </select>
         </div>
         <div class="field">
           <label id="lbl-package">Attendance package</label>
           <select id="f-package">
             <option value="">Select package</option>
-            <option>Standard attendee</option><option>Sponsor / Exhibitor</option>
-            <option>Academic / Student</option><option>Buyer / Partner</option><option>Other</option>
+            <option value="standard">Standard attendee</option><option value="sponsor_exhibitor">Sponsor / Exhibitor</option>
+            <option value="academic_student">Academic / Student</option><option value="buyer_partner">Buyer / Partner</option><option value="other">Other</option>
           </select>
         </div>
       </div>
@@ -405,6 +407,7 @@
   const API = '';
   let currentStep = 1;
   let eventDate = null;
+  let config = null;
   let currentLang = 'en';
 
   const translations = {
@@ -455,12 +458,42 @@
       submitFailMsg: 'Submission failed. Please try again.',
       connectFailMsg: 'Could not connect to server. Make sure the server is running.',
       successTitle: "You're Registered!",
-      successText: 'Thank you for registering. Your registration ID is:'
+      successText: 'Thank you for registering. Your registration ID is:',
+      stepContext: 'Step {step} of 3',
+      sectionParticipation: 'Participation Details',
+      closedTitle: 'Registration Closed',
+      closedSubtitle: 'The registration deadline for this event has passed.<br>Please contact the organizers for more information.',
+      successRegIdLabel: 'Registration ID',
+      successNote: 'Please save this ID for your records.<br>We look forward to seeing you at the Forum!',
+      countdownDays: 'Days',
+      countdownHours: 'Hours',
+      countdownMinutes: 'Minutes',
+      countdownSeconds: 'Seconds',
+      roleOptions: [
+        { value: '', label: 'Select an option' },
+        { value: 'sponsor', label: 'Sponsor' },
+        { value: 'exhibitor', label: 'Exhibitor' },
+        { value: 'seller', label: 'Seller' },
+        { value: 'buyer', label: 'Buyer' },
+        { value: 'academic_staff', label: 'Academic staff' },
+        { value: 'fishpond_owner', label: 'Fishpond owner / farmer' },
+        { value: 'logistics_partner', label: 'Logistics partner' },
+        { value: 'government_partner', label: 'Government / development partner' },
+        { value: 'other', label: 'Other' }
+      ],
+      packageOptions: [
+        { value: '', label: 'Select package' },
+        { value: 'standard', label: 'Standard attendee' },
+        { value: 'sponsor_exhibitor', label: 'Sponsor / Exhibitor' },
+        { value: 'academic_student', label: 'Academic / Student' },
+        { value: 'buyer_partner', label: 'Buyer / Partner' },
+        { value: 'other', label: 'Other' }
+      ]
     },
     sw: {
       pageTitle: 'TANFISH Forum 2026 — Usajili',
       heroTitle: 'Mkutano wa Biashara na Masoko ya Samaki wa Tanzania 2026',
-      heroTagline: 'Nunua · Uze · Unganisha · Kua',
+      heroTagline: 'Nunua · Uza · Unganisha · Kua',
       heroDesc: 'Jiunge na viongozi zaidi ya 200 wa sekta ya samaki, biashara, serikali na maendeleo nchini Tanzania katika mkutano mkuu wa nchi unaolenga kuimarisha biashara ya samaki, kupanua fursa za soko, na kuharakisha mabadiliko ya kidijitali kwenye mnyororo wa thamani wa samaki. Mkutano huu unaleta pamoja wavuvi, wafanyabiashara, wasindikaji, wanunuzi, watumizi wa nje, taasisi za fedha, watoa huduma za teknolojia, mashirika ya serikali, na washirika wa maendeleo kwa upatanishi wa mnunuzi-muuzaji, mashauriano ya ufadhili, maonyesho ya biashara, mitandao, na onyesho la TANFISH Market.',
       registrationCloses: 'Usajili unafunga',
       step1Title: 'Taarifa za Kibinafsi',
@@ -504,14 +537,61 @@
       submitFailMsg: 'Uwasilishaji umeshindwa. Tafadhali jaribu tena.',
       connectFailMsg: 'Haikuweza kuunganisha na seva. Tafadhali hakikisha seva inaendeshwa.',
       successTitle: 'Umejiandikisha!',
-      successText: 'Asante kwa kujisajili. Kitambulisho chako cha usajili ni:'
+      successText: 'Asante kwa kujisajili. Kitambulisho chako cha usajili ni:',
+      stepContext: 'Hatua {step} ya 3',
+      sectionParticipation: 'Maelezo ya Ushiriki',
+      closedTitle: 'Usajili Umefungwa',
+      closedSubtitle: 'Muda wa usajili kwa tukio hili umekwisha.<br>Tafadhali wasiliana na waandaaji kwa taarifa zaidi.',
+      successRegIdLabel: 'Kitambulisho cha Usajili',
+      successNote: 'Tafadhali hifadhi kitambulisho hiki kwa kumbukumbu zako.<br>Tunatarajia kukuona kwenye Mkutano!',
+      countdownDays: 'Siku',
+      countdownHours: 'Saa',
+      countdownMinutes: 'Dakika',
+      countdownSeconds: 'Sekunde',
+      roleOptions: [
+        { value: '', label: 'Chagua chaguo' },
+        { value: 'sponsor', label: 'Mdhamini' },
+        { value: 'exhibitor', label: 'Mwonyesho' },
+        { value: 'seller', label: 'Muuzaji' },
+        { value: 'buyer', label: 'Mnunuzi' },
+        { value: 'academic_staff', label: 'Wafanyakazi wa kielimu' },
+        { value: 'fishpond_owner', label: 'Mmiliki wa bwawa la samaki / mkulima' },
+        { value: 'logistics_partner', label: 'Mshirika wa usafirishaji' },
+        { value: 'government_partner', label: 'Serikali / mshirika wa maendeleo' },
+        { value: 'other', label: 'Nyingine' }
+      ],
+      packageOptions: [
+        { value: '', label: 'Chagua kifurushi' },
+        { value: 'standard', label: 'Mshiriki wa kawaida' },
+        { value: 'sponsor_exhibitor', label: 'Mdhamini / Mwonyesho' },
+        { value: 'academic_student', label: 'Mwalimu / Mwanafunzi' },
+        { value: 'buyer_partner', label: 'Mnunuzi / Mshirika' },
+        { value: 'other', label: 'Nyingine' }
+      ]
     }
   };
+
+  function renderSelectOptions(selectId, options) {
+    const select = document.getElementById(selectId);
+    if (!select) return;
+    const currentValue = select.value;
+    select.innerHTML = '';
+    options.forEach(opt => {
+      const option = document.createElement('option');
+      option.value = opt.value;
+      option.textContent = opt.label;
+      select.appendChild(option);
+    });
+    if (options.some(opt => opt.value === currentValue)) {
+      select.value = currentValue;
+    }
+  }
 
   async function init() {
     try {
       const cfg = await fetch(API + '/api/config').then(r => r.json());
-      document.getElementById('hero-date').textContent = new Date(cfg.eventDate).toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' });
+      config = cfg;
+      document.getElementById('hero-date').textContent = cfg.eventDateDisplay || new Date(cfg.eventDate).toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' });
       document.getElementById('hero-location').textContent = cfg.eventLocation;
       document.getElementById('deadline-text').textContent = new Date(cfg.registrationDeadline).toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' });
       eventDate = new Date(cfg.eventDate);
@@ -556,6 +636,8 @@
 
   function applyLanguage() {
     const t = translations[currentLang];
+    const locale = currentLang === 'sw' ? 'sw-TZ' : 'en-GB';
+
     document.title = t.pageTitle;
     document.getElementById('hero-title').textContent = t.heroTitle;
     document.getElementById('hero-tagline').textContent = t.heroTagline;
@@ -567,6 +649,7 @@
     document.getElementById('step-1-label').textContent = t.step1Label;
     document.getElementById('step-2-label').textContent = t.step2Label;
     document.getElementById('step-3-label').textContent = t.step3Label;
+    document.getElementById('step-context').innerHTML = '<strong>' + t.stepContext.replace('{step}', currentStep) + '</strong>';
     document.getElementById('lbl-name').innerHTML = t.lblName + ' <span class="req">*</span>';
     document.getElementById('lbl-email').innerHTML = t.lblEmail + ' <span class="req">*</span>';
     document.getElementById('lbl-phone').innerHTML = t.lblPhone + ' <span class="req">*</span>';
@@ -589,6 +672,13 @@
     document.getElementById('f-role-other').placeholder = t.placeholderRoleOther;
     document.getElementById('f-payment-ref').placeholder = t.placeholderPaymentRef;
     document.getElementById('f-comments').placeholder = t.placeholderComments;
+    document.getElementById('section-participation').textContent = t.sectionParticipation;
+    renderSelectOptions('f-role', t.roleOptions);
+    renderSelectOptions('f-package', t.packageOptions);
+    document.getElementById('cd-label-days').textContent = t.countdownDays;
+    document.getElementById('cd-label-hours').textContent = t.countdownHours;
+    document.getElementById('cd-label-mins').textContent = t.countdownMinutes;
+    document.getElementById('cd-label-secs').textContent = t.countdownSeconds;
     document.getElementById('next-1').innerHTML = '<i class="fa-solid fa-arrow-right"></i> ' + t.btnNext;
     document.getElementById('next-2').innerHTML = '<i class="fa-solid fa-arrow-right"></i> ' + t.btnNext2;
     document.getElementById('back-2').innerHTML = '<i class="fa-solid fa-arrow-left"></i> ' + t.btnBack;
@@ -598,12 +688,37 @@
     document.getElementById('register-another').innerHTML = '<i class="fa-solid fa-plus"></i> ' + t.btnRegisterAnother;
     document.getElementById('success-card-title').textContent = t.successTitle;
     document.getElementById('success-card-text').textContent = t.successText;
-    document.getElementById('deadline-badge').innerHTML = '<i class="fa-solid fa-clock"></i> &nbsp;' + t.registrationCloses + ': <span id="deadline-text">...</span>';
+    document.getElementById('reg-id-label').textContent = t.successRegIdLabel;
+    document.getElementById('success-note').innerHTML = t.successNote;
+    if (config) {
+      document.getElementById('deadline-text').textContent = new Date(config.registrationDeadline).toLocaleDateString(locale, { day:'numeric', month:'long', year:'numeric' });
+    }
+    document.getElementById('deadline-label').textContent = t.registrationCloses;
+    document.getElementById('closed-title').textContent = t.closedTitle;
+    document.getElementById('closed-subtitle').innerHTML = t.closedSubtitle;
   }
 
   function toggleLanguage() {
     currentLang = currentLang === 'en' ? 'sw' : 'en';
     applyLanguage();
+  }
+
+  function activateFormView() {
+    document.body.classList.add('form-started');
+  }
+
+  function attachFormInteraction() {
+    const formRoot = document.getElementById('form-card');
+    const begin = () => activateFormView();
+
+    formRoot.addEventListener('focusin', begin, true);
+    formRoot.addEventListener('mousedown', begin, true);
+    formRoot.addEventListener('touchstart', begin, true);
+
+    ['next-1','next-2','back-2','back-3','submit-btn'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('click', begin);
+    });
   }
 
   function setStep(s) {
@@ -619,14 +734,15 @@
     document.getElementById('progress-bar').style.width = pct + '%';
     currentStep = s;
     hideError();
-    document.getElementById('step-context').innerHTML = '<strong>Step ' + s + ' of 3</strong>';
+    const t = translations[currentLang];
+    document.getElementById('step-context').innerHTML = '<strong>' + t.stepContext.replace('{step}', s) + '</strong>';
     window.scrollTo({ top: document.getElementById('form-card').offsetTop - 24, behavior:'smooth' });
   }
 
   function toggleOtherRole() {
     const role = document.getElementById('f-role').value;
     const wrap = document.getElementById('role-other-wrap');
-    wrap.style.display = role === 'Other' ? 'block' : 'none';
+    wrap.style.display = role === 'other' ? 'block' : 'none';
   }
 
   function nextStep(from) {
@@ -638,7 +754,7 @@
     if (from === 2) {
       const role = g('f-role');
       if (!role) { showError(translations[currentLang].roleRequiredMsg); return; }
-      if (role === 'Other' && !g('f-role-other')) { showError(translations[currentLang].roleOtherMsg); return; }
+      if (role === 'other' && !g('f-role-other')) { showError(translations[currentLang].roleOtherMsg); return; }
     }
     setStep(from + 1);
   }
@@ -690,6 +806,7 @@
     setStep(1); hideError();
   }
 
+  attachFormInteraction();
   init();
 </script>
 </body>

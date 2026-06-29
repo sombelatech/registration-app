@@ -16,7 +16,7 @@ const PORT = process.env.PORT || 3000;
 const CONFIG = {
   eventName:    'Tanzania Digital Fisheries Trade & Market Linkages Forum 2026',
   eventDate:    '2026-07-22',
-  eventDateDisplay: 'July 22–23, 2026',
+  eventDateDisplay: '22 -23July 2026',
   eventLocation: 'University of Dar es Salaam',
   eventWebsite: 'https://tanfishmarket.com/',
   registrationDeadline: '2026-07-21',
