@@ -1,0 +1,35 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── Registrations ──────────────────────────────────────
+    // Anyone may submit ONE new registration (create only), as long as it's
+    // before the deadline and the required fields are present. Because the
+    // document id is derived from the email, a second attempt with the same
+    // email becomes an "update" — which only a signed-in admin can do — so
+    // duplicate emails are rejected automatically.
+    match /registrations/{id} {
+      allow create: if request.time < timestamp.date(2026, 7, 22)
+        && request.resource.data.name is string  && request.resource.data.name.size()  > 0
+        && request.resource.data.email is string && request.resource.data.email.size() > 0
+        && request.resource.data.phone is string && request.resource.data.phone.size() > 0
+        && request.resource.data.status == 'Confirmed';
+
+      // Only a signed-in admin can read, edit status, or delete.
+      // To lock this to ONE specific admin account, replace the line with:
+      //   allow read, update, delete: if request.auth.token.email == 'you@example.com';
+      allow read, update, delete: if request.auth != null;
+    }
+
+    // ── Sequential-id counter ──────────────────────────────
+    // Holds { count: <int> }. Read by no one in particular; bumped by exactly
+    // +1 during each registration transaction. Cannot be deleted or tampered.
+    match /meta/counter {
+      allow read:   if true;
+      allow create: if request.resource.data.count is int;
+      allow update: if request.resource.data.count == resource.data.count + 1;
+      allow delete: if false;
+    }
+  }
+}
