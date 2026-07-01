@@ -51,6 +51,10 @@
       max-width: 820px; margin: 0 auto 18px;
       line-height: 1.5; letter-spacing: 0.01em;
     }
+    .hero-fee {
+      font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.95);
+      margin: 10px auto 0; max-width: 820px; line-height: 1.5;
+    }
     .hero-actions {
       position: absolute; top: 18px; right: 24px;
       display:flex; justify-content:center; animation: floatIn 1s ease;
@@ -383,7 +387,8 @@
       <div class="name">Permanent Secretary</div>
       <div class="details"><strong>Ministry of Livestock and Fisheries</strong><br><strong>United Republic of Tanzania</strong></div>
     </div>
-    <p class="hero-desc" id="hero-desc">Join 200+ fisheries, business, government, and development leaders at Tanzania's premier forum dedicated to strengthening fisheries trade, expanding market opportunities, and accelerating digital transformation across the fisheries value chain. The forum brings together fishers, traders, processors, buyers, exporters, financial institutions, technology providers, government agencies, and development partners for buyer–seller matchmaking, financing consultations, business exhibitions, networking, and the TANFISH Market showcase. Registration Fee: Individual Delegate – TZS 150,000 | Exhibitor – TZS 400,000.</p>
+    <p class="hero-desc" id="hero-desc">Join 200+ fisheries, business, government, and development leaders at Tanzania's premier forum dedicated to strengthening fisheries trade, expanding market opportunities, and accelerating digital transformation across the fisheries value chain. The forum brings together fishers, traders, processors, buyers, exporters, financial institutions, technology providers, government agencies, and development partners for buyer–seller matchmaking, financing consultations, business exhibitions, networking, and the TANFISH Market showcase.</p>
+    <p class="hero-fee" id="hero-fee">Fee: Individual Delegate – TZS 150,000 | Exhibitor – TZS 400,000.</p>
     <div class="deadline-badge" id="deadline-badge"><i class="fa-solid fa-clock"></i> &nbsp;<span id="deadline-label">Registration closes</span>: <span id="deadline-text">...</span></div>
   </div>
 </div>
@@ -527,7 +532,7 @@
     <p id="success-card-note">Your application has been received successfully and is currently awaiting payment. A Control Number and detailed payment instructions will be sent to your registered email address (and/or mobile phone, if applicable). Please complete the payment using the provided Control Number.</p>
     <p id="success-card-warning"><strong>Please Note:</strong> Your registration will be confirmed only after your payment has been successfully received and verified. A confirmation email will be sent once your registration has been approved.</p>
     <div class="reg-id-label">Control Number</div>
-    <div class="reg-id-box" id="reg-id-display">TF2026-0001</div>
+    <div class="reg-id-box" id="reg-id-display">TF2026-0100</div>
     <br>
     <div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
       <button class="btn btn-primary" id="home-button" onclick="goHome()" style="margin:0 auto; min-width:220px;">
@@ -562,7 +567,8 @@
       pageTitle: 'TANFISH Forum 2026 — Registration',
       heroTitle: 'Tanzania Digital Fisheries Trade & Market Linkages Forum 2026',
       heroTagline: 'Buy · Sell · Connect · Grow',
-      heroDesc: "Join 200+ fisheries, business, government, and development leaders at Tanzania's premier forum dedicated to strengthening fisheries trade, expanding market opportunities, and accelerating digital transformation across the fisheries value chain. The forum brings together fishers, traders, processors, buyers, exporters, financial institutions, technology providers, government agencies, and development partners for buyer–seller matchmaking, financing consultations, business exhibitions, networking, and the TANFISH Market showcase. Registration Fee: Individual Delegate – TZS 150,000 | Exhibitor – TZS 400,000.",
+      heroDesc: "Join 200+ fisheries, business, government, and development leaders at Tanzania's premier forum dedicated to strengthening fisheries trade, expanding market opportunities, and accelerating digital transformation across the fisheries value chain. The forum brings together fishers, traders, processors, buyers, exporters, financial institutions, technology providers, government agencies, and development partners for buyer–seller matchmaking, financing consultations, business exhibitions, networking, and the TANFISH Market showcase.",
+      heroFee: 'Fee: Individual Delegate – TZS 150,000 | Exhibitor – TZS 400,000.',
       registrationCloses: 'Registration closes',
       step1Title: 'Personal Information',
       step2Title: 'Professional Information',
@@ -617,14 +623,16 @@
       countdownSeconds: 'Seconds',
       roleOptions: [
         { value: '', label: 'Select an option' },
-        { value: 'sponsor', label: 'Sponsor' },
-        { value: 'exhibitor', label: 'Exhibitor' },
-        { value: 'seller', label: 'Seller' },
         { value: 'buyer', label: 'Buyer' },
-        { value: 'academic_staff', label: 'Academic staff' },
-        { value: 'fishpond_owner', label: 'Fishpond owner / farmer' },
-        { value: 'logistics_partner', label: 'Logistics partner' },
-        { value: 'government_partner', label: 'Government / development partner' },
+        { value: 'seller', label: 'Seller' },
+        { value: 'processor', label: 'Processor' },
+        { value: 'exporter', label: 'Exporter' },
+        { value: 'retailer', label: 'Retailer' },
+        { value: 'financial_institution', label: 'Financial Institution' },
+        { value: 'logistics', label: 'Logistics' },
+        { value: 'technology_provider', label: 'Technology Provider' },
+        { value: 'government_staff', label: 'Government staff' },
+        { value: 'development_partner', label: 'Development Partner' },
         { value: 'other', label: 'Other' }
       ],
       packageOptions: [
@@ -637,7 +645,8 @@
       pageTitle: 'TANFISH Forum 2026 — Usajili',
       heroTitle: 'Mkutano wa Biashara na Masoko ya Samaki wa Tanzania 2026',
       heroTagline: 'Nunua · Uza · Unganisha · Kua',
-      heroDesc: 'Jiunge na wadau zaidi ya 200 wa sekta ya samaki, biashara, serikali na maendeleo nchini Tanzania katika mkutano mkuu wa nchi unaolenga kuimarisha biashara ya samaki, kupanua fursa za soko, na kuharakisha mabadiliko ya kidijitali kwenye mnyororo wa thamani ya samaki. Mkutano huu unaleta pamoja wavuvi, wafanyabiashara, wasindikaji, wanunuzi, watumizi wa nje, taasisi za fedha, watoa huduma za teknolojia, mashirika ya serikali, na washirika wa maendeleo kwa upatanishi wa mnunuzi-muuzaji, mashauriano ya ufadhili, maonyesho ya biashara, mitandao, na onyesho la TANFISH Market. Ada ya usajili: Mtu binafsi – TZS 150,000 | Mwonyesho – TZS 400,000.',
+      heroDesc: 'Jiunge na wadau zaidi ya 200 wa sekta ya samaki, biashara, serikali na maendeleo nchini Tanzania katika mkutano mkuu wa nchi unaolenga kuimarisha biashara ya samaki, kupanua fursa za soko, na kuharakisha mabadiliko ya kidijitali kwenye mnyororo wa thamani ya samaki. Mkutano huu unaleta pamoja wavuvi, wafanyabiashara, wasindikaji, wanunuzi, watumizi wa nje, taasisi za fedha, watoa huduma za teknolojia, mashirika ya serikali, na washirika wa maendeleo kwa upatanishi wa mnunuzi-muuzaji, mashauriano ya ufadhili, maonyesho ya biashara, mitandao, na onyesho la TANFISH Market.',
+      heroFee: 'Ada ya usajili: Mtu binafsi – TZS 150,000 | Mwonyesho – TZS 400,000.',
       registrationCloses: 'Usajili unafunga',
       step1Title: 'Taarifa za Kibinafsi',
       step2Title: 'Taarifa za Kitaaluma',
@@ -693,14 +702,16 @@
       countdownSeconds: 'Sekunde',
       roleOptions: [
         { value: '', label: 'Chagua chaguo' },
-        { value: 'sponsor', label: 'Mdhamini' },
-        { value: 'exhibitor', label: 'Mwonyesho' },
-        { value: 'seller', label: 'Muuzaji' },
         { value: 'buyer', label: 'Mnunuzi' },
-        { value: 'academic_staff', label: 'Wafanyakazi wa kielimu' },
-        { value: 'fishpond_owner', label: 'Mmiliki wa bwawa la samaki / mkulima' },
-        { value: 'logistics_partner', label: 'Mshirika wa usafirishaji' },
-        { value: 'government_partner', label: 'Serikali / mshirika wa maendeleo' },
+        { value: 'seller', label: 'Muuzaji' },
+        { value: 'processor', label: 'Msindikaji' },
+        { value: 'exporter', label: 'Mtoaji nje' },
+        { value: 'retailer', label: 'Muuza rejareja' },
+        { value: 'financial_institution', label: 'Taasisi ya fedha' },
+        { value: 'logistics', label: 'Usafirishaji' },
+        { value: 'technology_provider', label: 'Mtoa teknolojia' },
+        { value: 'government_staff', label: 'Wafanyakazi wa serikali' },
+        { value: 'development_partner', label: 'Mshirika wa maendeleo' },
         { value: 'other', label: 'Nyingine' }
       ],
       packageOptions: [
@@ -774,13 +785,15 @@
     const regRef = db.collection('registrations').doc(emailDocId(data.email));
     const counterRef = db.collection('meta').doc('counter');
 
-    // 1. Reserve a sequential id (counter is publicly readable + incrementable)
+    // 1. Reserve a sequential id (counter is publicly readable + incrementable).
+    // Use an offset so the first visible ID starts at 100.
     const registrationId = await db.runTransaction(async (tx) => {
       const snap = await tx.get(counterRef);
       const next = (snap.exists ? snap.data().count : 0) + 1;
+      const displayNumber = next + 99;
       if (snap.exists) tx.update(counterRef, { count: next });
       else tx.set(counterRef, { count: next });
-      return 'TF2026-' + String(next).padStart(4, '0');
+      return 'TF2026-' + String(displayNumber).padStart(4, '0');
     });
 
     // 2. Create the registration (a duplicate email => "update" => denied)
@@ -859,6 +872,7 @@
     document.getElementById('hero-title').textContent = t.heroTitle;
     document.getElementById('hero-tagline').textContent = t.heroTagline;
     document.getElementById('hero-desc').textContent = t.heroDesc;
+    document.getElementById('hero-fee').textContent = t.heroFee;
     document.getElementById('lang-toggle').textContent = currentLang === 'en' ? '🌐 Kiswahili' : '🌐 English';
     document.getElementById('step-1-title').innerHTML = '<i class="fa-solid fa-user"></i> ' + t.step1Title;
     document.getElementById('step-2-title').innerHTML = '<i class="fa-solid fa-briefcase"></i> ' + t.step2Title;
