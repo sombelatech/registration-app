@@ -224,14 +224,67 @@
     .admin-link { text-align: center; margin-top: 1.25rem; font-size: 13px; }
     .admin-link a { color: rgba(255,255,255,0.65); text-decoration: none; }
     .admin-link a:hover { color: #fff; }
+
+    /* ── UDSM HEADER ── */
+    .site-header {
+      position: relative; z-index: 10; width: 100%;
+      background: #1B2A6B; line-height: 1; overflow: hidden;
+    }
+    .site-header-inner {
+      display: flex; align-items: center; justify-content: center; gap: 20px;
+      padding: 14px 32px 10px; width: 100%;
+    }
+    .udsm-logo { height: 85px; width: auto; flex-shrink: 0; }
+    .udsm-text { display: flex; flex-direction: column; gap: 5px; text-align: center; }
+    .udsm-name {
+      font-size: clamp(18px, 3.2vw, 34px); font-weight: 900;
+      color: #ffffff; letter-spacing: 0.04em;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+
+    .udsm-curve {
+      width: 100%; height: 14px; margin-top: 8px;
+      background: #E8630A;
+    }
+    @media(max-width:600px){
+      .site-header-inner { padding: 10px 14px 8px; gap: 12px; }
+      .udsm-logo { height: 58px; }
+    }
+
+    /* ── SPONSORS FOOTER ── */
+    .site-footer {
+      position: relative; z-index: 10; width: 100%;
+      background: #ffffff; border-top: 4px solid #1B2A6B;
+      padding: 14px 24px 12px;
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.12);
+    }
+    .site-footer img {
+      width: 100%; max-width: 900px; height: auto;
+      display: block; margin: 0 auto; object-fit: contain;
+    }
+    .site-footer .footer-copy {
+      text-align: center; font-size: 11px; color: #8a9aa8; margin-top: 8px;
+    }
   </style>
 </head>
 <body>
+<!-- ── UDSM HEADER ── -->
+<div class="site-header">
+  <div class="site-header-inner">
+    <img src="udsm_logo.png" alt="UDSM Logo" class="udsm-logo"/>
+    <div class="udsm-text">
+      <div class="udsm-name">UNIVERSITY OF DAR ES SALAAM</div>
+
+    </div>
+  </div>
+  <div class="udsm-curve"></div>
+</div>
+
 
 <!-- ── HERO BANNER ── -->
 <div class="hero">
   <div class="hero-inner">
-    <div class="hero-icon"><img src="logo.png" alt="TANFISH" style="height:90px;width:auto;filter:drop-shadow(0 4px 12px rgba(0,0,0,0.4));"/></div>
+  <!-- <div class="hero-icon"><img src="logo.png" alt="TANFISH" style="height:90px;width:auto;filter:drop-shadow(0 4px 12px rgba(0,0,0,0.4));"/></div> -->
     <h1 id="hero-title">Tanzania Digital Fisheries Trade &amp;<br>Market Linkages Forum 2026</h1>
     <p class="hero-tagline" id="hero-tagline">Buy &nbsp;·&nbsp; Sell &nbsp;·&nbsp; Connect &nbsp;·&nbsp; Grow</p>
     <div class="hero-actions">
@@ -912,5 +965,12 @@
   attachFormInteraction();
   init();
 </script>
+
+<!-- ── SPONSORS FOOTER ── -->
+<div class="site-footer">
+  <img src="sponsors.png" alt="FAO · German Cooperation · European Union · FISH4ACP"/>
+  <div class="footer-copy">© 2026 TANFISH Market &nbsp;·&nbsp; <a href="https://tanfishmarket.com" target="_blank" style="color:#0864AF;text-decoration:none;">tanfishmarket.com</a></div>
+</div>
+
 </body>
 </html>
