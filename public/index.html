@@ -44,9 +44,18 @@
     .hero-tagline {
       font-size: clamp(13px, 2vw, 18px); font-weight: 600; letter-spacing: 0.18em;
       color: rgba(255,255,255,0.88); text-transform: uppercase;
-      margin-bottom: 18px; animation: floatIn 1s ease;
+      margin-bottom: 8px; animation: floatIn 1s ease;
     }
-    .hero-actions { display:flex; justify-content:center; margin-bottom: 12px; animation: floatIn 1s ease; }
+    .hero-theme {
+      font-size: 14px; font-style: italic; color: rgba(255,255,255,0.92);
+      max-width: 820px; margin: 0 auto 18px;
+      line-height: 1.5; letter-spacing: 0.01em;
+    }
+    .hero-actions {
+      position: absolute; top: 18px; right: 24px;
+      display:flex; justify-content:center; animation: floatIn 1s ease;
+      z-index: 2;
+    }
     .lang-toggle {
       border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.12); color: #fff;
       padding: 8px 14px; border-radius: 999px; cursor: pointer; font-size: 13px; font-weight: 600;
@@ -73,6 +82,74 @@
       text-align: center; background: rgba(246,180,24,0.15);
       border: 2px solid var(--yellow); border-radius: 10px;
       padding: 10px 18px; min-width: 72px;
+    }
+    .guest-honour {
+      margin: 24px auto 14px;
+      max-width: 760px;
+      padding: 24px 28px;
+      position: relative;
+      background: linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0.08));
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 28px;
+      box-shadow: 0 20px 70px rgba(0,0,0,0.22);
+      color: #fff;
+      text-align: center;
+      overflow: hidden;
+      backdrop-filter: blur(16px);
+      animation: floatIn 1.2s ease;
+    }
+    .guest-honour::before,
+    .guest-honour::after {
+      content: '';
+      position: absolute;
+      width: 140px;
+      height: 140px;
+      border: 1px solid rgba(255,255,255,0.24);
+      border-radius: 50%;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    .guest-honour::before { left: -56px; }
+    .guest-honour::after { right: -56px; }
+    .guest-honour .title {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 12px 18px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.12);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--yellow);
+      margin: 0 auto 14px;
+      position: relative;
+      z-index: 1;
+    }
+    .guest-honour .title::before {
+      content: '★';
+      font-size: 14px;
+      color: var(--yellow);
+    }
+    .guest-honour .name {
+      font-size: clamp(20px, 2.1vw, 26px);
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 8px;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      color: #fff;
+      z-index: 1;
+      position: relative;
+    }
+    .guest-honour .details {
+      font-size: 14px;
+      color: rgba(255,255,255,0.88);
+      line-height: 1.5;
+      z-index: 1;
+      position: relative;
     }
     .cd-num { font-size: 32px; font-weight: 900; color: var(--yellow); line-height: 1; }
     .cd-label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.7); margin-top: 4px; }
@@ -286,6 +363,7 @@
   <div class="hero-inner">
   <!-- <div class="hero-icon"><img src="logo.png" alt="TANFISH" style="height:90px;width:auto;filter:drop-shadow(0 4px 12px rgba(0,0,0,0.4));"/></div> -->
     <h1 id="hero-title">Tanzania Digital Fisheries Trade &amp;<br>Market Linkages Forum 2026</h1>
+    <p class="hero-theme">Theme: Unlocking Digital Trade, Strengthening Market Linkages, and Promoting Sustainable Growth in Fisheries Value Chains.</p>
     <p class="hero-tagline" id="hero-tagline">Buy &nbsp;·&nbsp; Sell &nbsp;·&nbsp; Connect &nbsp;·&nbsp; Grow</p>
     <div class="hero-actions">
       <button class="lang-toggle" id="lang-toggle" onclick="toggleLanguage()">🌐 Kiswahili</button>
@@ -300,7 +378,12 @@
       <div class="cd-box"><div class="cd-num" id="cd-mins">--</div><div class="cd-label" id="cd-label-mins">Minutes</div></div>
       <div class="cd-box"><div class="cd-num" id="cd-secs">--</div><div class="cd-label" id="cd-label-secs">Seconds</div></div>
     </div>
-    <p class="hero-desc" id="hero-desc">Join 200+ fisheries, business, government, and development leaders at Tanzania's premier forum dedicated to strengthening fisheries trade, expanding market opportunities, and accelerating digital transformation across the fisheries value chain. The forum brings together fishers, traders, processors, buyers, exporters, financial institutions, technology providers, government agencies, and development partners for buyer–seller matchmaking, financing consultations, business exhibitions, networking, and the TANFISH Market showcase.</p>
+    <div class="guest-honour">
+      <div class="title">Guest of Honour</div>
+      <div class="name">Permanent Secretary</div>
+      <div class="details"><strong>Ministry of Livestock and Fisheries</strong><br><strong>United Republic of Tanzania</strong></div>
+    </div>
+    <p class="hero-desc" id="hero-desc">Join 200+ fisheries, business, government, and development leaders at Tanzania's premier forum dedicated to strengthening fisheries trade, expanding market opportunities, and accelerating digital transformation across the fisheries value chain. The forum brings together fishers, traders, processors, buyers, exporters, financial institutions, technology providers, government agencies, and development partners for buyer–seller matchmaking, financing consultations, business exhibitions, networking, and the TANFISH Market showcase. Registration Fee: Individual Delegate – TZS 150,000 | Exhibitor – TZS 400,000.</p>
     <div class="deadline-badge" id="deadline-badge"><i class="fa-solid fa-clock"></i> &nbsp;<span id="deadline-label">Registration closes</span>: <span id="deadline-text">...</span></div>
   </div>
 </div>
@@ -403,18 +486,14 @@
           <label id="lbl-package">Attendance package</label>
           <select id="f-package">
             <option value="">Select package</option>
-            <option value="standard">Standard attendee</option><option value="sponsor_exhibitor">Sponsor / Exhibitor</option>
-            <option value="academic_student">Academic / Student</option><option value="buyer_partner">Buyer / Partner</option><option value="other">Other</option>
+            <option value="individual">Individual — TSh 150,000</option>
+            <option value="exhibitor">Exhibitor — TSh 400,000</option>
           </select>
         </div>
       </div>
       <div class="field" id="role-other-wrap" style="display:none;">
         <label id="lbl-role-other">Please describe your role</label>
         <textarea id="f-role-other" placeholder="Tell us more about your role or organisation"></textarea>
-      </div>
-      <div class="field">
-        <label id="lbl-payment-ref">Payment reference / invoice note</label>
-        <input type="text" id="f-payment-ref" placeholder="Optional payment reference or note"/>
       </div>
       <div class="btn-row">
         <button class="btn btn-secondary" id="back-2" onclick="prevStep(2)"><i class="fa-solid fa-arrow-left"></i> &nbsp;Back</button>
@@ -443,17 +522,18 @@
   <!-- Success -->
   <div class="success-card" id="success-card">
     <div class="success-icon"><i class="fa-solid fa-circle-check"></i></div>
-    <h2 id="success-card-title">You're Registered!</h2>
-    <p id="success-card-text">Thank you for registering. Your registration ID is:</p>
-    <div class="reg-id-label">Registration ID</div>
+    <h2 id="success-card-title">Registration Submitted Successfully!</h2>
+    <p id="success-card-text">Thank you for registering for the Tanzania Digital Fisheries Trade & Market Linkages Forum 2026.</p>
+    <p id="success-card-note">Your application has been received successfully and is currently awaiting payment. A Control Number and detailed payment instructions will be sent to your registered email address (and/or mobile phone, if applicable). Please complete the payment using the provided Control Number.</p>
+    <p id="success-card-warning"><strong>Please Note:</strong> Your registration will be confirmed only after your payment has been successfully received and verified. A confirmation email will be sent once your registration has been approved.</p>
+    <div class="reg-id-label">Control Number</div>
     <div class="reg-id-box" id="reg-id-display">TF2026-0001</div>
-    <p id="success-note" style="margin-top:10px">Please save this ID for your records.<br>We look forward to seeing you at the Forum!</p>
     <br>
     <div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
-      <button class="btn btn-secondary" id="back-to-start" onclick="startOver()" style="margin:0 auto">
-        <i class="fa-solid fa-rotate-left"></i> Back to beginning
+      <button class="btn btn-primary" id="home-button" onclick="goHome()" style="margin:0 auto; min-width:220px;">
+        <i class="fa-solid fa-house"></i> Return to Home Page
       </button>
-      <button class="btn btn-secondary" id="register-another" onclick="resetForm()" style="margin:0 auto">
+      <button class="btn btn-secondary" id="register-another" onclick="resetForm()" style="margin:0 auto; min-width:220px;">
         <i class="fa-solid fa-plus"></i> Register another person
       </button>
     </div>
@@ -482,7 +562,7 @@
       pageTitle: 'TANFISH Forum 2026 — Registration',
       heroTitle: 'Tanzania Digital Fisheries Trade & Market Linkages Forum 2026',
       heroTagline: 'Buy · Sell · Connect · Grow',
-      heroDesc: "Join 200+ fisheries, business, government, and development leaders at Tanzania's premier forum dedicated to strengthening fisheries trade, expanding market opportunities, and accelerating digital transformation across the fisheries value chain. The forum brings together fishers, traders, processors, buyers, exporters, financial institutions, technology providers, government agencies, and development partners for buyer–seller matchmaking, financing consultations, business exhibitions, networking, and the TANFISH Market showcase.",
+      heroDesc: "Join 200+ fisheries, business, government, and development leaders at Tanzania's premier forum dedicated to strengthening fisheries trade, expanding market opportunities, and accelerating digital transformation across the fisheries value chain. The forum brings together fishers, traders, processors, buyers, exporters, financial institutions, technology providers, government agencies, and development partners for buyer–seller matchmaking, financing consultations, business exhibitions, networking, and the TANFISH Market showcase. Registration Fee: Individual Delegate – TZS 150,000 | Exhibitor – TZS 400,000.",
       registrationCloses: 'Registration closes',
       step1Title: 'Personal Information',
       step2Title: 'Professional Information',
@@ -507,7 +587,6 @@
       lblRole: 'I am registering as',
       lblPackage: 'Attendance package',
       lblRoleOther: 'Please describe your role',
-      lblPaymentRef: 'Payment reference / invoice note',
       lblComments: 'Additional comments',
       placeholderName: 'e.g. Cosmas Sombela',
       placeholderEmail: 'you@example.com',
@@ -517,7 +596,6 @@
       placeholderTitle: 'e.g. Data Scientist',
       placeholderDept: 'e.g. Research & Innovation',
       placeholderRoleOther: 'Tell us more about your role or organisation',
-      placeholderPaymentRef: 'Optional payment reference or note',
       placeholderComments: 'Any special requirements or questions...',
       requiredMsg: 'Please fill in your Full name, Email, and Phone number.',
       invalidEmailMsg: 'Please enter a valid email address.',
@@ -525,8 +603,8 @@
       roleOtherMsg: 'Please describe your registration role.',
       submitFailMsg: 'Submission failed. Please try again.',
       connectFailMsg: 'Could not connect to server. Make sure the server is running.',
-      successTitle: "You're Registered!",
-      successText: 'Thank you for registering. Your registration ID is:',
+      successTitle: 'Registration Submitted Successfully!',
+      successText: 'Thank you for registering for the Tanzania Digital Fisheries Trade & Market Linkages Forum 2026.',
       stepContext: 'Step {step} of 3',
       sectionParticipation: 'Participation Details',
       closedTitle: 'Registration Closed',
@@ -551,18 +629,15 @@
       ],
       packageOptions: [
         { value: '', label: 'Select package' },
-        { value: 'standard', label: 'Standard attendee' },
-        { value: 'sponsor_exhibitor', label: 'Sponsor / Exhibitor' },
-        { value: 'academic_student', label: 'Academic / Student' },
-        { value: 'buyer_partner', label: 'Buyer / Partner' },
-        { value: 'other', label: 'Other' }
+        { value: 'individual', label: 'Individual — TSh 150,000' },
+        { value: 'exhibitor', label: 'Exhibitor — TSh 400,000' }
       ]
     },
     sw: {
       pageTitle: 'TANFISH Forum 2026 — Usajili',
       heroTitle: 'Mkutano wa Biashara na Masoko ya Samaki wa Tanzania 2026',
       heroTagline: 'Nunua · Uza · Unganisha · Kua',
-      heroDesc: 'Jiunge na viongozi zaidi ya 200 wa sekta ya samaki, biashara, serikali na maendeleo nchini Tanzania katika mkutano mkuu wa nchi unaolenga kuimarisha biashara ya samaki, kupanua fursa za soko, na kuharakisha mabadiliko ya kidijitali kwenye mnyororo wa thamani wa samaki. Mkutano huu unaleta pamoja wavuvi, wafanyabiashara, wasindikaji, wanunuzi, watumizi wa nje, taasisi za fedha, watoa huduma za teknolojia, mashirika ya serikali, na washirika wa maendeleo kwa upatanishi wa mnunuzi-muuzaji, mashauriano ya ufadhili, maonyesho ya biashara, mitandao, na onyesho la TANFISH Market.',
+      heroDesc: 'Jiunge na wadau zaidi ya 200 wa sekta ya samaki, biashara, serikali na maendeleo nchini Tanzania katika mkutano mkuu wa nchi unaolenga kuimarisha biashara ya samaki, kupanua fursa za soko, na kuharakisha mabadiliko ya kidijitali kwenye mnyororo wa thamani ya samaki. Mkutano huu unaleta pamoja wavuvi, wafanyabiashara, wasindikaji, wanunuzi, watumizi wa nje, taasisi za fedha, watoa huduma za teknolojia, mashirika ya serikali, na washirika wa maendeleo kwa upatanishi wa mnunuzi-muuzaji, mashauriano ya ufadhili, maonyesho ya biashara, mitandao, na onyesho la TANFISH Market. Ada ya usajili: Mtu binafsi – TZS 150,000 | Mwonyesho – TZS 400,000.',
       registrationCloses: 'Usajili unafunga',
       step1Title: 'Taarifa za Kibinafsi',
       step2Title: 'Taarifa za Kitaaluma',
@@ -597,7 +672,6 @@
       placeholderTitle: 'mf. Mtaalamu wa Data',
       placeholderDept: 'mf. Utafiti na Ubunifu',
       placeholderRoleOther: 'Tueleze zaidi kuhusu jukumu lako au shirika',
-      placeholderPaymentRef: 'Marejeleo ya malipo au maelezo ya hiari',
       placeholderComments: 'Mahitaji maalum au maswali...',
       requiredMsg: 'Tafadhali jaza Jina kamili, Barua pepe, na Namba ya simu.',
       invalidEmailMsg: 'Tafadhali ingiza anwani halali ya barua pepe.',
@@ -605,8 +679,8 @@
       roleOtherMsg: 'Tafadhali eleza jukumu lako la usajili.',
       submitFailMsg: 'Uwasilishaji umeshindwa. Tafadhali jaribu tena.',
       connectFailMsg: 'Haikuweza kuunganisha na seva. Tafadhali hakikisha seva inaendeshwa.',
-      successTitle: 'Umejiandikisha!',
-      successText: 'Asante kwa kujisajili. Kitambulisho chako cha usajili ni:',
+      successTitle: 'Usajili Umethibitishwa kwa Mafanikio!',
+      successText: 'Asante kwa kujisajili kwa Mkutano wa Biashara na Masoko ya Samaki wa Tanzania 2026.',
       stepContext: 'Hatua {step} ya 3',
       sectionParticipation: 'Maelezo ya Ushiriki',
       closedTitle: 'Usajili Umefungwa',
@@ -631,11 +705,8 @@
       ],
       packageOptions: [
         { value: '', label: 'Chagua kifurushi' },
-        { value: 'standard', label: 'Mshiriki wa kawaida' },
-        { value: 'sponsor_exhibitor', label: 'Mdhamini / Mwonyesho' },
-        { value: 'academic_student', label: 'Mwalimu / Mwanafunzi' },
-        { value: 'buyer_partner', label: 'Mnunuzi / Mshirika' },
-        { value: 'other', label: 'Nyingine' }
+        { value: 'individual', label: 'Mtu binafsi — TSh 150,000' },
+        { value: 'exhibitor', label: 'Mwigizaji / Exhibitor — TSh 400,000' }
       ]
     }
   };
@@ -806,7 +877,6 @@
     document.getElementById('lbl-role').innerHTML = t.lblRole + ' <span class="req">*</span>';
     document.getElementById('lbl-package').textContent = t.lblPackage;
     document.getElementById('lbl-role-other').textContent = t.lblRoleOther;
-    document.getElementById('lbl-payment-ref').textContent = t.lblPaymentRef;
     document.getElementById('lbl-comments').textContent = t.lblComments;
     document.getElementById('f-name').placeholder = t.placeholderName;
     document.getElementById('f-email').placeholder = t.placeholderEmail;
@@ -816,7 +886,6 @@
     document.getElementById('f-title').placeholder = t.placeholderTitle;
     document.getElementById('f-dept').placeholder = t.placeholderDept;
     document.getElementById('f-role-other').placeholder = t.placeholderRoleOther;
-    document.getElementById('f-payment-ref').placeholder = t.placeholderPaymentRef;
     document.getElementById('f-comments').placeholder = t.placeholderComments;
     document.getElementById('section-participation').textContent = t.sectionParticipation;
     renderSelectOptions('f-role', t.roleOptions);
@@ -919,7 +988,7 @@
         name: g('f-name'), email: g('f-email').toLowerCase(), phone: g('f-phone'),
         organization: g('f-org'), jobTitle: g('f-title'), department: g('f-dept'),
         country: g('f-country'), participantType: g('f-role'), participantTypeOther: g('f-role-other'),
-        paymentPackage: g('f-package'), paymentReference: g('f-payment-ref'), comments: g('f-comments')
+        paymentPackage: g('f-package'), comments: g('f-comments')
       };
       const registrationId = await saveRegistration(data);
       sendEmails({ ...data, registrationId }).catch(console.error); // fire-and-forget
@@ -929,10 +998,6 @@
       document.getElementById('form-card').style.display = 'none';
       document.getElementById('success-card').style.display = 'block';
       window.scrollTo({ top: 0, behavior: 'smooth' });
-      setTimeout(() => {
-        resetForm();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }, 4000);
     } catch(e) {
       const known = ['already registered', 'Registration is now closed'].some(s => (e.message||'').includes(s));
       showError(known ? e.message : (translations[currentLang].submitFailMsg));
@@ -951,7 +1016,7 @@
   }
 
   function resetForm() {
-    ['f-name','f-email','f-phone','f-org','f-title','f-dept','f-country','f-role','f-package','f-role-other','f-payment-ref','f-comments'].forEach(id => {
+    ['f-name','f-email','f-phone','f-org','f-title','f-dept','f-country','f-role','f-package','f-role-other','f-comments'].forEach(id => {
       const el = document.getElementById(id);
       if (el.tagName === 'SELECT') el.selectedIndex = 0;
       else el.value = '';
@@ -960,6 +1025,10 @@
     document.getElementById('success-card').style.display = 'none';
     toggleOtherRole();
     setStep(1); hideError();
+  }
+
+  function goHome() {
+    window.location.href = './index.html';
   }
 
   attachFormInteraction();
